@@ -1,0 +1,23 @@
+{
+  "name": "web-chat-app",
+  "version": "1.0.0",
+  "description": "## Installation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edmondchuc/web-chat-app.git"
+  },
+  "author": "Edmond Chuc",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/edmondchuc/web-chat-app/issues"
+  },
+  "homepage": "https://github.com/edmondchuc/web-chat-app#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "socket.io": "^2.1.1"
+  }
+}
