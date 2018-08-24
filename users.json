@@ -1,0 +1,22 @@
+{
+    "Super": 
+    {
+        "email": "",
+        "superAdmin": true,
+        "groupAdmin": true,
+        "groups": [
+            {
+                "newbies": 
+                {
+                    "channels": ["general", "help"]
+                }
+            },
+            {
+                "food": 
+                {
+                    "channels": ["pizza", "cakes"]
+                }
+            }
+        ]
+    }
+}

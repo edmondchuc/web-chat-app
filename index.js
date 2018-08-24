@@ -4,6 +4,7 @@ const http = require('http');
 const server = http.Server(app);
 const socketIO = require('socket.io');
 const io = socketIO(server);
+const fs = require('fs');
 
 app.use(express.static(__dirname + '/web-chat/dist/web-chat'));
 
@@ -21,3 +22,32 @@ io.on('connection', (socket) => {
 server.listen(port, () => {
     console.log(`Server started on port: ${port}`);
 });
+
+// read user database
+let users;
+fs.readFile('users.json', (error, data) => {
+    if(error) throw error;
+    users = JSON.parse(data);
+    // console.log(users.Super.groups[0].newbies.channels);
+});
+// let users = JSON.parse(data);
+// console.log(users["Super"].groups[0]);
+
+let bob = {
+    "email": "bob123@gmail.com",
+    "superAdmin": false,
+    "groupAdmin": false,
+    "groups": [
+        {
+            "newbies": 
+            {
+                "channels": ["general", "help"]
+            }
+        },
+        {
+            "programming": {
+                "channels": ["javascript", "typescript"]
+            }
+        }
+    ]
+}
