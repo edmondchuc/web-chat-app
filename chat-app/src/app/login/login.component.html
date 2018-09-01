@@ -1,0 +1,24 @@
+<section class="hero has-background-primary">
+  <div class="hero-body">
+    <div class="container">
+        <h1 class="title is-1">Edmond's Web Chat</h1>
+    </div>
+  </div>
+</section>
+<br><br>
+<div class="container">
+  <div class="notification">
+    <!-- <h2 class="title is-2" style="text-align:center">Enter your name...</h2> -->
+    <form (submit)="login($event)">
+      <div class="field has-addons has-addons-centered">
+          <label class="label is-large">Name:</label>
+          <div class="control">
+              <input class="input" type="text" placeholder="Enter your name" [(ngModel)]='username' id='username' name='username'>
+          </div>
+          <div class="control">
+            <button class="button is-primary">Join chat room</button>
+          </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -6,7 +6,7 @@ const socketIO = require('socket.io');
 const io = socketIO(server);
 const fs = require('fs');
 
-app.use(express.static(__dirname + '/web-chat/dist/web-chat'));
+app.use(express.static(__dirname + '/chat-app/dist/chat-app'));
 
 const port = process.env.PORT || 3000;
 
@@ -21,6 +21,10 @@ io.on('connection', (socket) => {
 
 server.listen(port, () => {
     console.log(`Server started on port: ${port}`);
+});
+
+app.get('/api/users', (req, res) => {
+    res.send(users);
 });
 
 // read user database
