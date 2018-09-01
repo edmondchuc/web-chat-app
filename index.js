@@ -23,8 +23,12 @@ server.listen(port, () => {
     console.log(`Server started on port: ${port}`);
 });
 
-app.get('/api/users', (req, res) => {
-    res.send(users);
+app.get('/api/user', (req, res) => {
+    const username = req.query.username;
+    console.log('GET request at /api/user');
+    console.log(`\tFetching user data for: ${username}`);
+    // res.send(users[username]);
+    
 });
 
 // read user database
@@ -34,9 +38,9 @@ fs.readFile('users.json', (error, data) => {
     users = JSON.parse(data);
     // console.log(users.Super.groups[0].newbies.channels);
     
-    for(let i = 0; i < users.length; i++) {
-        console.log(users[i].name);
-    }
+    // for(let i = 0; i < users.length; i++) {
+    //     console.log(users[i].name);
+    // }
 });
 // let users = JSON.parse(data);
 // console.log(users["Super"].groups[0]);
