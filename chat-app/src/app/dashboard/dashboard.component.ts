@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UsersService } from '../users.service';
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-dashboard',
@@ -9,10 +10,11 @@ import { UsersService } from '../users.service';
 export class DashboardComponent implements OnInit {
   username:string = localStorage.getItem('username');
   email:string = '';
+  emailField:string = '';
 
   userData;
 
-  constructor(private usersService:UsersService) {
+  constructor(private usersService:UsersService, private router:Router) {
     this.getUsers();
    }
 
@@ -33,13 +35,30 @@ export class DashboardComponent implements OnInit {
         console.log(this.userData);
 
         // update data (email, groups, channels, admin privileges)
-        this.userData.email;
+        this.email = this.userData.email;
       }
     );
   }
 
   updateEmail() {
-    this.usersService.updateEmail(this.username, this.email);
+    this.usersService.updateEmail(this.username, this.emailField)
+    .subscribe(
+      (data) => {
+        data = JSON.stringify(data);
+        console.log('POST call successful. Sent ' + data);
+        this.email = this.emailField;
+        this.emailField = '';
+      },
+      (err) => {
+        console.log('Error in POST call. Error: ' + err);
+      },
+      () => {
+        console.log('POST call completed.');
+      }
+    );
   }
 
+  logOut() {
+    this.router.navigateByUrl('/');
+  }
 }

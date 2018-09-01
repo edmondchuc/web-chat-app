@@ -5,10 +5,12 @@
     Your email is registered as: {{email}}
   </p>
   <form (submit)="updateEmail($event)">
-    <input class="input" type="email" [(ngModel)]='email' name='email' placeholder="new email">
+    <input class="input" type="email" [(ngModel)]='emailField' name='emailField' placeholder="example@email.com">
     <div class="control">
       <button class="button is-primary">Update email</button>
     </div>
   </form>
+
   
+  <button (click)="logOut()">Log out</button>
 </div>

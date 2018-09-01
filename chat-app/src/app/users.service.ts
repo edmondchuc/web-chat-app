@@ -40,17 +40,6 @@ export class UsersService {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' })
     };
 
-    this.http.post(`api/email`, JSON.stringify(body), httpOptions)
-    .subscribe(
-      (data) => {
-        console.log('POST call successful. Sent ' + data);
-      },
-      (err) => {
-        console.log('Error in POST call. Error: ' + err);
-      },
-      () => {
-        console.log('POST call completed.');
-      }
-    );
+    return this.http.post(`api/email`, JSON.stringify(body), httpOptions);
   }
 }
