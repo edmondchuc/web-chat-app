@@ -8,7 +8,9 @@ import { UsersService } from '../users.service';
 })
 export class DashboardComponent implements OnInit {
   username:string = localStorage.getItem('username');
-  users;
+  email:string = '';
+
+  userData;
 
   constructor(private usersService:UsersService) {
     this.getUsers();
@@ -21,19 +23,23 @@ export class DashboardComponent implements OnInit {
   getUsers() {
     this.usersService.getUsers(this.username).subscribe(
       data => {
-        this.users = data;
+        this.userData = data;
       },
       err => {
         console.error
       },
       () => {
         console.log('\tUsers retrieved')
-        console.log(this.users);
-        // this.users.forEach(element => {
-        //   console.log(element);
-        // });
+        console.log(this.userData);
+
+        // update data (email, groups, channels, admin privileges)
+        this.userData.email;
       }
     );
+  }
+
+  updateEmail() {
+    this.usersService.updateEmail(this.username, this.email);
   }
 
 }

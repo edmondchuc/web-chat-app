@@ -1,2 +1,14 @@
 <h1 class="title is-1">Dashboard</h1>
-<h2 class="subtitle is-3">Welcome to the chat service</h2>
+<h2 class="subtitle is-3">Welcome {{username}}</h2>
+<div class="content">
+  <p>
+    Your email is registered as: {{email}}
+  </p>
+  <form (submit)="updateEmail($event)">
+    <input class="input" type="email" [(ngModel)]='email' name='email' placeholder="new email">
+    <div class="control">
+      <button class="button is-primary">Update email</button>
+    </div>
+  </form>
+  
+</div>

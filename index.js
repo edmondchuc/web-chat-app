@@ -5,6 +5,8 @@ const server = http.Server(app);
 const socketIO = require('socket.io');
 const io = socketIO(server);
 const fs = require('fs');
+const bodyParser = require('body-parser')
+app.use(bodyParser.json())
 
 app.use(express.static(__dirname + '/chat-app/dist/chat-app'));
 
@@ -81,6 +83,7 @@ const userDataTemplate = {
     ]
 }
 
+// Return user data back to client
 app.get('/api/user', (req, res) => {
     const username = req.query.username;
     console.log('GET request at /api/user');
@@ -99,4 +102,13 @@ app.get('/api/user', (req, res) => {
             res.send(userData);
         }
     }));
+});
+
+// Update email of client
+// app.post('/api/email/:username-:email', (req, res) => {
+//     console.log(req.params.username);
+//     console.log(req.params.email);
+// });
+app.post('/api/email', (req, res) => {
+    
 });

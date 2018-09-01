@@ -16,4 +16,41 @@ export class UsersService {
       }
     });
   }
+
+  // updateEmail(username:string, email:string) {
+  //   this.http.post(`api/email/${username}-${email}`, new HttpHeaders())
+  //   .subscribe(
+  //     (data) => {
+  //       console.log('POST call successful. Sent ' + data);
+  //     },
+  //     (err) => {
+  //       console.log('Error in POST call. Error: ' + err);
+  //     },
+  //     () => {
+  //       console.log('POST call completed.');
+  //     }
+  //   );
+  // }
+  updateEmail(username:string, email:string) {
+    let body = {
+      'username': username,
+      'email': email
+    };
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    };
+
+    this.http.post(`api/email`, JSON.stringify(body), httpOptions)
+    .subscribe(
+      (data) => {
+        console.log('POST call successful. Sent ' + data);
+      },
+      (err) => {
+        console.log('Error in POST call. Error: ' + err);
+      },
+      () => {
+        console.log('POST call completed.');
+      }
+    );
+  }
 }
