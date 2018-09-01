@@ -1,44 +1,93 @@
-
-
-[
-    {
-        "name": "Bob",
+{
+    "Bob": {
         "email": "",
         "superAdmin": true,
         "groupAdmin": true,
         "groups": [
             {
-                "newbies": 
-                {
-                    "channels": ["general", "help"]
+                "newbies": {
+                    "channels": [
+                        "general",
+                        "help"
+                    ]
                 }
             },
             {
-                "food": 
-                {
-                    "channels": ["pizza", "cakes"]
+                "food": {
+                    "channels": [
+                        "pizza",
+                        "cakes"
+                    ]
                 }
             }
         ]
     },
-    {
-        "name": "Dylan",
+    "Dylan": {
         "email": "dylanprior@hotmail.com",
         "superAdmin": true,
         "groupAdmin": true,
         "groups": [
             {
-                "newbies": 
-                {
-                    "channels": ["general", "help"]
+                "newbies": {
+                    "channels": [
+                        "general",
+                        "help"
+                    ]
                 }
             },
             {
-                "food": 
-                {
-                    "channels": ["pizza", "cakes"]
+                "food": {
+                    "channels": [
+                        "pizza",
+                        "cakes"
+                    ]
+                }
+            }
+        ]
+    },
+    "Edmond": {
+        "email": "",
+        "superAdmin": false,
+        "groupAdmin": false,
+        "groups": [
+            {
+                "newbies": {
+                    "channels": [
+                        "general",
+                        "help"
+                    ]
+                }
+            }
+        ]
+    },
+    "Eddy": {
+        "email": "",
+        "superAdmin": false,
+        "groupAdmin": false,
+        "groups": [
+            {
+                "newbies": {
+                    "channels": [
+                        "general",
+                        "help"
+                    ]
+                }
+            }
+        ]
+    },
+    "Ryan": {
+        "email": "",
+        "superAdmin": false,
+        "groupAdmin": false,
+        "groups": [
+            {
+                "newbies": {
+                    "channels": [
+                        "general",
+                        "help"
+                    ]
                 }
             }
         ]
     }
-]
+}

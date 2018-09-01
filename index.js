@@ -23,6 +23,10 @@ server.listen(port, () => {
     console.log(`Server started on port: ${port}`);
 });
 
+/**
+ * Retrieve users from a relative file named users.json
+ * @param {(users:any) => void} callback The callback function that should take one parameter.
+ */
 function retrieveUsers(callback) {
     let users;
     fs.readFile('users.json', (error, data) => {
@@ -33,20 +37,48 @@ function retrieveUsers(callback) {
 }
 
 /**
- * Retrieves the user data of a user based on their username if it exists. 
- * @param {string} username The username of the user for data retrieval.
- * @returns  The user data object or undefined if it does not exist.
+ * Add a new user to the system.
+ * @param {string} username The username of the user. This is used as the key to the user data object
+ * @param {object} userData The user data object
+ */
+function addUser(username, userData) {
+    retrieveUsers( (users) => {
+        users[username] = userData;
+        users = JSON.stringify(users);
+        fs.writeFile('users.json', users, (err) => {
+            if (err) throw err;
+        });
+    })
+}
+
+/**
+ * Retrieve the data of the user
+ * @param {string} username The username of the user for data retrieval
+ * @param {(userData:object) => void} callback The callback function
  */
 function retrieveUserData(username, callback) {
     let userData;
     retrieveUsers( (users) => {
-        users.forEach(user => {
-            if(user.name === username) {
-                userData = user;
-            };
-        });
+        userData = users[username];
         callback(userData);
     });
+}
+
+/**
+ * The user data default template
+ */
+const userDataTemplate = {
+    "email": "",
+    "superAdmin": false,
+    "groupAdmin": false,
+    "groups": [
+        {
+            "newbies": 
+            {
+                "channels": ["general", "help"]
+            }
+        },
+    ]
 }
 
 app.get('/api/user', (req, res) => {
@@ -60,6 +92,11 @@ app.get('/api/user', (req, res) => {
         }
         else {
             console.log(`\tUser ${username} was not found.`);
+            console.log(`\tCreating user ${username} and saving to file`);
+            userData = userDataTemplate;
+            addUser(username, userData)
+            console.log(`\tResponding with data on user: ${username}`);
+            res.send(userData);
         }
     }));
 });
