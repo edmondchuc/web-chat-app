@@ -29,9 +29,9 @@ export class DashboardComponent implements OnInit {
       () => {
         console.log('\tUsers retrieved')
         console.log(this.users);
-        this.users.forEach(element => {
-          console.log(element);
-        });
+        // this.users.forEach(element => {
+        //   console.log(element);
+        // });
       }
     );
   }
