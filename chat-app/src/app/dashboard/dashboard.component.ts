@@ -64,4 +64,8 @@ export class DashboardComponent implements OnInit {
   logOut() {
     this.router.navigateByUrl('/');
   }
+
+  viewChannel(group) {
+    console.log(group);
+  }
 }

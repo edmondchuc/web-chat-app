@@ -17,6 +17,6 @@
 
 <ul *ngIf="groups">
     <li *ngFor="let group of groups">
-        {{group.name}}
+        Channel: {{group.name}} <button (click)="viewChannel(group)">View channels</button>
     </li>
 </ul>
