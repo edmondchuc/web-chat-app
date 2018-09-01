@@ -82,11 +82,15 @@ const userDataTemplate = {
     "groupAdmin": false,
     "groups": [
         {
-            "newbies": 
-            {
-                "channels": ["general", "help"]
-            }
+            "name": "newbies",
+            "isGroupAdmin": false,
+            "channels": ["general", "help"]
         },
+        {
+            "name": "general",
+            "isGroupAdmin": false,
+            "channels": ["chitchat", "topic of the day"]
+        }
     ]
 }
 

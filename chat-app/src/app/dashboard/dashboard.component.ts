@@ -11,6 +11,7 @@ export class DashboardComponent implements OnInit {
   username:string = localStorage.getItem('username');
   email:string = '';
   emailField:string = '';
+  groups = [];
 
   userData;
 
@@ -36,6 +37,8 @@ export class DashboardComponent implements OnInit {
 
         // update data (email, groups, channels, admin privileges)
         this.email = this.userData.email;
+        this.groups = this.userData.groups
+        console.log(this.groups);
       }
     );
   }
