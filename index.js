@@ -29,25 +29,31 @@ fs.readFile('users.json', (error, data) => {
     if(error) throw error;
     users = JSON.parse(data);
     // console.log(users.Super.groups[0].newbies.channels);
+    
+    for(let i = 0; i < users.length; i++) {
+        console.log(users[i].name);
+    }
 });
 // let users = JSON.parse(data);
 // console.log(users["Super"].groups[0]);
 
-let bob = {
-    "email": "bob123@gmail.com",
-    "superAdmin": false,
-    "groupAdmin": false,
-    "groups": [
-        {
-            "newbies": 
-            {
-                "channels": ["general", "help"]
-            }
-        },
-        {
-            "programming": {
-                "channels": ["javascript", "typescript"]
-            }
-        }
-    ]
-}
+
+
+// let bob = {
+//     "email": "bob123@gmail.com",
+//     "superAdmin": false,
+//     "groupAdmin": false,
+//     "groups": [
+//         {
+//             "newbies": 
+//             {
+//                 "channels": ["general", "help"]
+//             }
+//         },
+//         {
+//             "programming": {
+//                 "channels": ["javascript", "typescript"]
+//             }
+//         }
+//     ]
+// }

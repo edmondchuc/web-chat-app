@@ -1,0 +1,12 @@
+[
+    {
+        "name": "Artificially Unintelligent",
+        "channels": ["General", "Text"],
+        "users": ["Bob", "Sally"]
+    },
+    {
+        "name": "Another group",
+        "channels": ["another", "test"],
+        "users": ["Bob", "Sally"]
+    }
+]

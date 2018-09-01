@@ -1,6 +1,8 @@
-{
-    "Super": 
+
+
+[
     {
+        "name": "Bob",
         "email": "",
         "superAdmin": true,
         "groupAdmin": true,
@@ -18,5 +20,25 @@
                 }
             }
         ]
+    },
+    {
+        "name": "Dylan",
+        "email": "dylanprior@hotmail.com",
+        "superAdmin": true,
+        "groupAdmin": true,
+        "groups": [
+            {
+                "newbies": 
+                {
+                    "channels": ["general", "help"]
+                }
+            },
+            {
+                "food": 
+                {
+                    "channels": ["pizza", "cakes"]
+                }
+            }
+        ]
     }
-}
+]
