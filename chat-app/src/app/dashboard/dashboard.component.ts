@@ -15,7 +15,7 @@ export class DashboardComponent implements OnInit {
   channels = [];
   showGroupsBool = true;
   showChannelsBool = false;
-  title:string = '';
+  title:string = 'Dashboard';
 
   userData;
 
@@ -69,10 +69,13 @@ export class DashboardComponent implements OnInit {
     this.router.navigateByUrl('/');
   }
 
-  viewChannels(group) {
-    localStorage.setItem('currentGroup', group);
-    console.log(group);
-    // console.log(localStorage.getItem('currentStorage'));
+  /**
+   * Route to the group page
+   * @param group The group object
+   */
+  viewGroup(group) {
+    localStorage.setItem('currentGroup', group.name);
+    this.router.navigateByUrl('/group');
   }
 
   // viewChannel(group) {
