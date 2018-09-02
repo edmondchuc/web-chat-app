@@ -12,19 +12,23 @@ export class DashboardComponent implements OnInit {
   email:string = '';
   emailField:string = '';
   groups = [];
+  channels = [];
+  showGroupsBool = true;
+  showChannelsBool = false;
+  title:string = '';
 
   userData;
 
   constructor(private usersService:UsersService, private router:Router) {
-    this.getUsers();
+    this.getUser();
    }
 
   ngOnInit() {
     console.log("Logged in as " + this.username);
   }
 
-  getUsers() {
-    this.usersService.getUsers(this.username).subscribe(
+  getUser() {
+    this.usersService.getUser(this.username).subscribe(
       data => {
         this.userData = data;
       },
@@ -32,13 +36,13 @@ export class DashboardComponent implements OnInit {
         console.error
       },
       () => {
-        console.log('\tUsers retrieved')
+        console.log('\tUser retrieved')
         console.log(this.userData);
 
         // update data (email, groups, channels, admin privileges)
         this.email = this.userData.email;
         this.groups = this.userData.groups
-        console.log(this.groups);
+        // this.showGroups();
       }
     );
   }
@@ -65,7 +69,29 @@ export class DashboardComponent implements OnInit {
     this.router.navigateByUrl('/');
   }
 
-  viewChannel(group) {
+  viewChannels(group) {
+    localStorage.setItem('currentGroup', group);
     console.log(group);
+    // console.log(localStorage.getItem('currentStorage'));
   }
+
+  // viewChannel(group) {
+  //   this.channels = group.channels;
+  //   console.log(this.channels);
+  //   this.showChannels(group);
+  // }
+
+  // private showChannels(group) {
+  //   this.title = `Group: ${group.name}`;
+  //   this.showGroupsBool = false;
+  //   this.showChannelsBool = true;
+  // }
+
+  // private showGroups() {
+  //   this.title = 'Dashboard'
+  //   this.showGroupsBool = true;
+  //   this.showChannelsBool = false;
+  }
+
+
 }

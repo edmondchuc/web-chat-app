@@ -9,7 +9,7 @@ export class UsersService {
 
   constructor(private http:HttpClient) { }
 
-  getUsers(username:string) {
+  getUser(username:string) {
     return this.http.get('api/user', {
       params: {
         username: username

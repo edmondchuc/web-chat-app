@@ -1,4 +1,4 @@
-<h1 class="title is-1">Dashboard</h1>
+<h1 class="title is-1">{{title}}</h1>
 <h2 class="subtitle is-3">Welcome {{username}}</h2>
 <div class="content">
   <p>
@@ -17,6 +17,12 @@
 
 <ul *ngIf="groups">
     <li *ngFor="let group of groups">
-        Channel: {{group.name}} <button (click)="viewChannel(group)">View channels</button>
+        Group: {{group.name}} <button (click)="viewChannels(group)">View channels</button>
     </li>
 </ul>
+
+<!-- <ul *ngIf="showChannelsBool">
+    <li *ngFor="let channel of channels">
+        Channel: {{channel}}
+    </li>
+</ul> -->
