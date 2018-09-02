@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UsersService } from '../users.service';
 import { Router } from "@angular/router";
+import { ChangeDetectorRef } from "@angular/core";
 
 @Component({
   selector: 'app-dashboard',
@@ -25,7 +26,11 @@ export class DashboardComponent implements OnInit {
   // groups retrieved if admin
   allGroups;
 
-  constructor(private usersService:UsersService, private router:Router) {
+  constructor(private usersService:UsersService, private router:Router, private ref: ChangeDetectorRef) {
+    // setInterval(() => {
+    //   this.ref.detectChanges();
+    // }, 500); 
+
     this.getUser();
    }
 
@@ -91,23 +96,32 @@ export class DashboardComponent implements OnInit {
   createGroupName:string = '';
 
   createGroup() {
-    console.log(`Creating group ${this.createGroupName}`);
+    if(this.allGroups.includes(this.createGroupName)) {
+      alert(`Group ${this.createGroupName} already exists`);
+    }
+    else {
+      console.log(`Creating group ${this.createGroupName}`);
 
-    this.usersService.createGroup(this.username, this.createGroupName)
-    .subscribe(
-      (data) => {
-        data = JSON.stringify(data);
-        console.log('POST call successful. Sent ' + data);
-        this.allGroups = data;
-        console.log(this.allGroups);
-      },
-      (err) => {
-        console.log('Error in POST call. Error: ' + err);
-      },
-      () => {
-        console.log('POST call completed.');
-      }
-    );
+      this.usersService.createGroup(this.username, this.createGroupName)
+      .subscribe(
+        (data) => {
+          console.log(data);
+          // data = JSON.stringify(data);
+          console.log('POST call successful. Sent ' + data);
+          this.allGroups = data;
+          console.log(this.allGroups);
+          
+          // update view
+          
+        },
+        (err) => {
+          console.log('Error in POST call. Error: ' + err);
+        },
+        () => {
+          console.log('POST call completed.');
+        }
+      );
+    }
   }
 
   getGroups() {
@@ -116,7 +130,7 @@ export class DashboardComponent implements OnInit {
       this.usersService.getGroups().subscribe(
         data => {
           this.allGroups = data;
-          console.log(this.allGroups);
+          console.log(data);
         },
         err => {
           console.error
@@ -129,12 +143,12 @@ export class DashboardComponent implements OnInit {
   }
 
   removeGroup(group) {
-    if(group.name === 'newbies' || group.name === 'general') {
+    if(group === 'newbies' || group === 'general') {
       alert('Cannot remove these default groups from the system');
     }
     else {
-      console.log(`Removing group ${group.name} from the system.`);
-      this.usersService.removeGroup(group.name).subscribe(
+      console.log(`Removing group ${group} from the system.`);
+      this.usersService.removeGroup(group).subscribe(
         data => {
           console.log("Received data: " + data);
           this.allGroups = data;
@@ -143,7 +157,7 @@ export class DashboardComponent implements OnInit {
           console.error
         },
         () => {
-          console.log("Finished removing group " + group.name);
+          console.log("Finished removing group " + group);
         }
       );
     }

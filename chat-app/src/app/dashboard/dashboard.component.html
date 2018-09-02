@@ -45,7 +45,7 @@
 
 <h2 *ngIf="isGroupAdmin || isSuperAdmin" class="title is-3">Admin panel for groups:</h2>
 <ul *ngIf="allGroups">
-    <li *ngFor="let group of groups">
-        Group: {{group.name}} <button (click)="removeGroup(group)">Remove group</button>
+    <li *ngFor="let group of allGroups">
+        Group: {{group}} <button (click)="removeGroup(group)">Remove group</button>
     </li>
 </ul>
