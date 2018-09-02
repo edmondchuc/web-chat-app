@@ -126,7 +126,7 @@ export class DashboardComponent implements OnInit {
 
   getGroups() {
     if(this.isSuperAdmin || this.isGroupAdmin) {
-      console.log('Admin fetching new groups');
+      console.log('Admin fetching all groups');
       this.usersService.getGroups().subscribe(
         data => {
           this.allGroups = data;

@@ -60,4 +60,8 @@ export class UsersService {
   removeChannel(username:string, groupName:string, channelName:string) {
     return this.http.delete('api/channel/remove/' + username + '.' + groupName + '.' + channelName);
   }
+
+  getChannels(groupName:string) {
+    return this.http.get('api/' + groupName + '/channels');
+  }
 }

@@ -1,9 +1,7 @@
 # Web Chat App
 
 ## Current task
-* Creating a JSON data and saving it to disk
-* Check if the file of a user exists already
-* If it exists and we're updating something, retrieve the data, and only change the property we're interested in and save it back to disk
+* Super admins and admins can see all the groups and channels.
 
 ## Modules
 * `npm init`

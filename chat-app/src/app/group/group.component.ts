@@ -10,7 +10,7 @@ import { UsersService } from '../users.service';
 export class GroupComponent implements OnInit {
   groupName:string = '';
   username:string = '';
-  channels;
+  channels; // list of channels for users with no admin roles
 
   isGroupAdmin = false;
   isSuperAdmin = false;
@@ -18,6 +18,8 @@ export class GroupComponent implements OnInit {
   createChannelName:string = '';
 
   userData;
+
+  allChannels; // list of channels for users with admin roles
 
   constructor(private router:Router, private usersService:UsersService) { 
     this.groupName = localStorage.getItem('currentGroup');
@@ -29,8 +31,10 @@ export class GroupComponent implements OnInit {
     this.usersService.getUser(this.username).subscribe(
       data => {
         this.userData = data;
+        console.log('Setting user data');
         this.isGroupAdmin = this.userData.groupAdmin;
         this.isSuperAdmin = this.userData.superAdmin;
+        console.log(data);
       },
       err => {
         console.error
@@ -45,6 +49,7 @@ export class GroupComponent implements OnInit {
             this.channels = group.channels;
           }
         });
+        this.getChannels();
       }
     );
   }
@@ -87,6 +92,7 @@ export class GroupComponent implements OnInit {
   removeChannel(channel) {
     if(channel === 'general') {
       alert(`Cannot remove default channel ${channel}`);
+      return;
     }
     console.log(`Removing channel ${channel}`);
     this.usersService.removeChannel(this.username, this.groupName, channel).subscribe(
@@ -102,6 +108,25 @@ export class GroupComponent implements OnInit {
         console.log(`Removing channel ${channel} completed`);
       }
     );
+  }
+
+  getChannels() {
+    console.log(`Group admin: ${this.isGroupAdmin} Super admin: ${this.isSuperAdmin}`);
+    if(this.isGroupAdmin || this.isSuperAdmin) {
+      console.log('Admin fetching all channels');
+      this.usersService.getChannels(this.groupName).subscribe(
+        data => {
+          console.log('Received data for all channels');
+          console.log(data);
+        },
+        err => {
+          console.error;
+        },
+        () => {
+          console.log('Admin has finished fetching all channels');
+        }
+      );
+    }
   }
 
 }

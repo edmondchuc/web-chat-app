@@ -260,3 +260,22 @@ app.delete('/api/channel/remove/:username.:groupName.:channelName', (req, res) =
         writeUsers(users)
     });
 });
+
+app.get('/api/:group/channels', (req, res) => {
+    console.log('GET request at /api/:group/channels');
+    const groupName = req.params.group;
+    console.log(`\tCollating all channels for group ${groupName}`);
+    let channels = [];
+    retrieveUsers((users) => {
+        for(let user in users) {
+            if(users.hasOwnProperty(user)) {
+                users[user].groups.forEach(group => {
+                    console.log(group.channels);
+                    // if(groups.includes(group.name)) {
+                        
+                    // }
+                });
+            }
+        }
+    });
+});
