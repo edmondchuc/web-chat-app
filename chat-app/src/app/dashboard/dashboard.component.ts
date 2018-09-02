@@ -21,16 +21,13 @@ export class DashboardComponent implements OnInit {
   isGroupAdmin = false;
   isSuperAdmin = false;
 
+  // all of the user's data
   userData;
 
   // groups retrieved if admin
   allGroups;
 
   constructor(private usersService:UsersService, private router:Router, private ref: ChangeDetectorRef) {
-    // setInterval(() => {
-    //   this.ref.detectChanges();
-    // }, 500); 
-
     this.getUser();
    }
 
@@ -88,9 +85,17 @@ export class DashboardComponent implements OnInit {
    * @param group The group object
    */
   viewGroup(group) {
-    console.log(`Viewing group ${group.name}`);
-    localStorage.setItem('currentGroup', group.name);
-    this.router.navigateByUrl('/group');
+    if(this.isGroupAdmin || this.isSuperAdmin) {
+      console.log(`Viewing group ${group}`);
+      localStorage.setItem('currentGroup', group);
+      this.router.navigateByUrl('/group');
+    }
+    else {
+      console.log(`Viewing group ${group.name}`);
+      localStorage.setItem('currentGroup', group.name);
+      this.router.navigateByUrl('/group');
+    }
+    
   }
 
   createGroupName:string = '';
@@ -106,13 +111,9 @@ export class DashboardComponent implements OnInit {
       .subscribe(
         (data) => {
           console.log(data);
-          // data = JSON.stringify(data);
           console.log('POST call successful. Sent ' + data);
           this.allGroups = data;
           console.log(this.allGroups);
-          
-          // update view
-          
         },
         (err) => {
           console.log('Error in POST call. Error: ' + err);
