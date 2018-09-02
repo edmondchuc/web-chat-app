@@ -16,9 +16,13 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    
-    localStorage.setItem("username", this.username);
-    this.router.navigateByUrl('/dashboard');
+    if(this.username === "") {
+      alert("Username field cannot be empty");
+    }
+    else {
+      localStorage.setItem("username", this.username);
+      this.router.navigateByUrl('/dashboard');
+    }
   }
 
 }

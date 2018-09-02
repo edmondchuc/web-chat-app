@@ -91,7 +91,23 @@ export class DashboardComponent implements OnInit {
   createGroupName:string = '';
 
   createGroup() {
-    console.log(`creating group ${this.createGroupName}`);
+    console.log(`Creating group ${this.createGroupName}`);
+
+    this.usersService.createGroup(this.username, this.createGroupName)
+    .subscribe(
+      (data) => {
+        data = JSON.stringify(data);
+        console.log('POST call successful. Sent ' + data);
+        this.allGroups = data;
+        console.log(this.allGroups);
+      },
+      (err) => {
+        console.log('Error in POST call. Error: ' + err);
+      },
+      () => {
+        console.log('POST call completed.');
+      }
+    );
   }
 
   getGroups() {
@@ -106,9 +122,30 @@ export class DashboardComponent implements OnInit {
           console.error
         },
         () => {
-          console.log('Finished retrieving admin groups');
+          console.log('Finished retrieving groups for admin user');
         }
       )
+    }
+  }
+
+  removeGroup(group) {
+    if(group.name === 'newbies' || group.name === 'general') {
+      alert('Cannot remove these default groups from the system');
+    }
+    else {
+      console.log(`Removing group ${group.name} from the system.`);
+      this.usersService.removeGroup(group.name).subscribe(
+        data => {
+          console.log("Received data: " + data);
+          this.allGroups = data;
+        },
+        err => {
+          console.error
+        },
+        () => {
+          console.log("Finished removing group " + group.name);
+        }
+      );
     }
   }
 

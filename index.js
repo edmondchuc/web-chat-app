@@ -83,13 +83,11 @@ const userDataTemplate = {
     "groups": [
         {
             "name": "newbies",
-            "isGroupAdmin": false,
             "channels": ["general", "help"]
         },
         {
             "name": "general",
-            "isGroupAdmin": false,
-            "channels": ["chitchat", "topic of the day"]
+            "channels": ["general", "chitchat", "topic of the day"]
         }
     ]
 }
@@ -115,10 +113,7 @@ app.get('/api/user', (req, res) => {
     }));
 });
 
-// return all groups for admin
-app.get('/api/groups', (req, res) => {
-    console.log('GET request at /api/groups');
-    console.log('\tLoading data...');
+function getGroups(res) {
     retrieveUsers((users) => {
         let groups = [];
         for(let user in users) {
@@ -135,14 +130,18 @@ app.get('/api/groups', (req, res) => {
         console.log('\tResponding with data on groups');
         res.send(groups);
     });
+}
+
+// return all groups for admin
+app.get('/api/groups', (req, res) => {
+    console.log('GET request at /api/groups');
+    console.log('\tLoading data...');
+    getGroups(res);
 });
 
 // Update email of client
-// app.post('/api/email/:username-:email', (req, res) => {
-//     console.log(req.params.username);
-//     console.log(req.params.email);
-// });
 app.post('/api/email', (req, res) => {
+    console.log('POST request at /api/email');
     const username = req.body.username;
     const email = req.body.email;
     retrieveUsers((users) => {
@@ -150,4 +149,62 @@ app.post('/api/email', (req, res) => {
         writeUsers(users);
     });
     res.send(req.body);
+});
+
+app.delete('/api/removeGroup/:groupName', (req, res) => {
+    console.log('DELETE request at /api/removeGroup');
+    const groupName = req.params.groupName;
+
+    retrieveUsers( (users) => {
+        for(let user in users) { // loop over the users object's properties
+            if(users.hasOwnProperty(user)) {
+                users[user].groups.forEach(group => {
+                    if(group.name === groupName) {
+                        // find the index of group name in the groups list and remove it
+                        users[user].groups.splice(users[user].groups.indexOf(groupName), 1);
+                        console.log(`\tRemoved group ${groupName}`);
+                        
+                    }
+                });
+            }
+        }
+        // write to file the new changes
+        writeUsers(users);
+        getGroups(res);
+    });
+});
+
+app.post('/api/createGroup', (req, res) => {
+    console.log('POST request at /api/createGroup');
+    let username = req.body.username;
+    let groupName = req.body.groupName;
+    console.log(`\tCreating new group ${groupName} for user ${username}`);
+
+    console.log('\tLoading data...');
+    // update groups
+    retrieveUsers((users) => {
+        // create the new group
+        users[username].groups.push(
+            {
+                "name": groupName,
+                "channels": ["general"]
+            }
+        );
+        writeUsers(users);
+
+        let groups = [];
+        for(let user in users) {
+            if(users.hasOwnProperty(user)) {
+                users[user].groups.forEach(group => {
+                    if(!groups.includes(group.name)) {
+                        groups.push(group.name);
+                    }
+                });
+            }
+        }
+        console.log("\tFound groups:");
+        console.log(groups);
+        console.log('\tResponding with data on groups');
+        res.send(groups);
+    });
 });
