@@ -42,10 +42,11 @@ function retrieveUsers(callback) {
  * Writes the object containing user data to a file named users.json
  * @param {users:Object} users The object containing user data
  */
-function writeUsers(users) {
+function writeUsers(users, callback) {
     users = JSON.stringify(users);
     fs.writeFile('users.json', users, (err) => {
         if (err) throw err;
+        if(callback !== undefined) callback();
     });
 }
 /**
@@ -169,8 +170,9 @@ app.delete('/api/removeGroup/:groupName', (req, res) => {
             }
         }
         // write to file the new changes
-        writeUsers(users);
-        getGroups(res);
+        writeUsers(users, () => {
+            getGroups(res);
+        });
     });
 });
 
