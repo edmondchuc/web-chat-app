@@ -10,7 +10,7 @@ import { UsersService } from '../users.service';
 export class GroupComponent implements OnInit {
   groupName:string = '';
   username:string = '';
-  channels = [];
+  channels;
 
   isGroupAdmin = false;
   isSuperAdmin = false;
@@ -79,7 +79,27 @@ export class GroupComponent implements OnInit {
         console.error;
       },
       () => {
-        console.log('Creating new channel completed');
+        console.log(`Creating new channel ${this.createChannelName} completed`);
+      }
+    );
+  }
+
+  removeChannel(channel) {
+    if(channel === 'general') {
+      alert(`Cannot remove default channel ${channel}`);
+    }
+    console.log(`Removing channel ${channel}`);
+    this.usersService.removeChannel(this.username, this.groupName, channel).subscribe(
+      data => {
+        console.log(`New list of channels received`);
+        console.log(data);
+        this.channels = data;
+      },
+      err => {
+        console.error;
+      },
+      () => {
+        console.log(`Removing channel ${channel} completed`);
       }
     );
   }

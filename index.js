@@ -230,3 +230,33 @@ app.post('/api/channel/create', (req, res) => {
         });
     });
 });
+
+app.delete('/api/channel/remove/:username.:groupName.:channelName', (req, res) => {
+    console.log('DELETE request at /api/channel/remove:groupName.:channelName');
+    console.log(req.params);
+    const username = req.params.username;
+    const groupName = req.params.groupName;
+    const channelName = req.params.channelName;
+    let channels;
+
+    retrieveUsers( (users) => {
+        for(let user in users) { // loop over the users object's properties
+            if(users.hasOwnProperty(user)) {
+                users[user].groups.forEach(group => {
+                    if(group.name === groupName) {
+                        // remove channel
+                        group.channels.splice(group.channels.indexOf(channelName), 1);
+                        if(user === username) {
+                            channels = group.channels;
+                            console.log(`'User's channels`);
+                            console.log(channels);
+                            res.send(channels);
+                        }
+                    }
+                });
+            }
+        }
+        // write to file the new changes
+        writeUsers(users)
+    });
+});

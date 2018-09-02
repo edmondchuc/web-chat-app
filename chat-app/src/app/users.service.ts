@@ -56,4 +56,8 @@ export class UsersService {
     };
     return this.http.post('api/channel/create', JSON.stringify(body), this.genHeadersJSON());
   }
+
+  removeChannel(username:string, groupName:string, channelName:string) {
+    return this.http.delete('api/channel/remove/' + username + '.' + groupName + '.' + channelName);
+  }
 }
