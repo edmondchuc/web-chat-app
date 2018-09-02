@@ -1,3 +1,10 @@
 <h1 class="title is-1">Group: {{groupName}}</h1>
 <h2 class="subtitle is-5">User: {{username}}</h2>
 <button (click)="logOut()">Log out</button>
+
+<h2 class="title">Channels:</h2>
+<ul *ngIf="channels">
+    <li *ngFor="let channel of channels">
+        Group: {{channel}} <button (click)="viewChannel(channel)">View channel</button>
+    </li>
+</ul>

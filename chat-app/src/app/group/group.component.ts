@@ -10,6 +10,7 @@ import { UsersService } from '../users.service';
 export class GroupComponent implements OnInit {
   groupName:string = '';
   username:string = '';
+  channels = [];
 
   userData;
 
@@ -30,6 +31,13 @@ export class GroupComponent implements OnInit {
       () => {
         console.log('\tUser retrieved')
         console.log(this.userData);
+
+        // update channels list
+        this.userData.groups.forEach(group => {
+          if(group.name === this.groupName) {
+            this.channels = group.channels;
+          }
+        });
       }
     );
   }
@@ -40,6 +48,10 @@ export class GroupComponent implements OnInit {
 
   logOut() {
     this.router.navigateByUrl('/');
+  }
+
+  viewChannel(channel) {
+    console.log(`Viewing channel ${channel}`);
   }
 
 }
