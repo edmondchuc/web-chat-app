@@ -22,6 +22,9 @@ export class DashboardComponent implements OnInit {
 
   userData;
 
+  // groups retrieved if admin
+  allGroups;
+
   constructor(private usersService:UsersService, private router:Router) {
     this.getUser();
    }
@@ -47,6 +50,8 @@ export class DashboardComponent implements OnInit {
         this.groups = this.userData.groups
         this.isGroupAdmin = this.userData.groupAdmin;
         this.isSuperAdmin = this.userData.superAdmin;
+
+        this.getGroups(); // get the groups if this user is admin
       }
     );
   }
@@ -87,6 +92,24 @@ export class DashboardComponent implements OnInit {
 
   createGroup() {
     console.log(`creating group ${this.createGroupName}`);
+  }
+
+  getGroups() {
+    if(this.isSuperAdmin || this.isGroupAdmin) {
+      console.log('Admin fetching new groups');
+      this.usersService.getGroups().subscribe(
+        data => {
+          this.allGroups = data;
+          console.log(this.allGroups);
+        },
+        err => {
+          console.error
+        },
+        () => {
+          console.log('Finished retrieving admin groups');
+        }
+      )
+    }
   }
 
 }

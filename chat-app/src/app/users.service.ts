@@ -17,20 +17,6 @@ export class UsersService {
     });
   }
 
-  // updateEmail(username:string, email:string) {
-  //   this.http.post(`api/email/${username}-${email}`, new HttpHeaders())
-  //   .subscribe(
-  //     (data) => {
-  //       console.log('POST call successful. Sent ' + data);
-  //     },
-  //     (err) => {
-  //       console.log('Error in POST call. Error: ' + err);
-  //     },
-  //     () => {
-  //       console.log('POST call completed.');
-  //     }
-  //   );
-  // }
   updateEmail(username:string, email:string) {
     let body = {
       'username': username,
@@ -41,5 +27,9 @@ export class UsersService {
     };
 
     return this.http.post(`api/email`, JSON.stringify(body), httpOptions);
+  }
+
+  getGroups() {
+    return this.http.get('api/groups');
   }
 }

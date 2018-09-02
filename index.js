@@ -115,6 +115,28 @@ app.get('/api/user', (req, res) => {
     }));
 });
 
+// return all groups for admin
+app.get('/api/groups', (req, res) => {
+    console.log('GET request at /api/groups');
+    console.log('\tLoading data...');
+    retrieveUsers((users) => {
+        let groups = [];
+        for(let user in users) {
+            if(users.hasOwnProperty(user)) {
+                users[user].groups.forEach(group => {
+                    if(!groups.includes(group.name)) {
+                        groups.push(group.name);
+                    }
+                });
+            }
+        }
+        console.log("\tFound groups:");
+        console.log(groups);
+        console.log('\tResponding with data on groups');
+        res.send(groups);
+    });
+});
+
 // Update email of client
 // app.post('/api/email/:username-:email', (req, res) => {
 //     console.log(req.params.username);
