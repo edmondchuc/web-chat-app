@@ -2,9 +2,25 @@
 <h2 class="subtitle is-5">User: {{username}}</h2>
 <button (click)="logOut()">Log out</button>
 
+<div *ngIf="isGroupAdmin || isSuperAdmin" class="container">
+    <div class="notification">
+      <form (submit)="createChannel($event)">
+        <div class="field has-addons has-addons-centered">
+            <label class="label is-large">New channel name:</label>
+            <div class="control">
+                <input class="input" type="text" placeholder="channel name" [(ngModel)]='createChannelName' id='createChannelName' name='createChannelName'>
+            </div>
+            <div class="control">
+              <button class="button is-primary">Create channel</button>
+            </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
 <h2 class="title">Channels:</h2>
 <ul *ngIf="channels">
     <li *ngFor="let channel of channels">
-        Group: {{channel}} <button (click)="viewChannel(channel)">View channel</button>
+        Group: {{channel}} <button (click)="viewChannel(channel)">View channel</button> <button *ngIf="isGroupAdmin || isSuperAdmin" (click)="removeChannel(channel)">Remove channel</button>
     </li>
 </ul>

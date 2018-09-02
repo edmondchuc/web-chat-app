@@ -10,6 +10,12 @@ export class UsersService {
 
   constructor(private http:HttpClient) { }
 
+  genHeadersJSON() {
+    return {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    };
+  }
+
   getUser(username:string) {
     return this.http.get('api/user', {
       params: {
@@ -23,11 +29,7 @@ export class UsersService {
       'username': username,
       'email': email
     };
-    const httpOptions = {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-    };
-
-    return this.http.post(`api/email`, JSON.stringify(body), httpOptions);
+    return this.http.post(`api/email`, JSON.stringify(body), this.genHeadersJSON());
   }
 
   getGroups() {
@@ -39,14 +41,19 @@ export class UsersService {
       'username': username,
       'groupName': groupName
     };
-    const httpOptions = {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-    };
-
-    return this.http.post('api/createGroup', JSON.stringify(body), httpOptions);
+    return this.http.post('api/createGroup', JSON.stringify(body), this.genHeadersJSON());
   }
 
   removeGroup(groupName:string) {
     return this.http.delete('api/removeGroup/' + groupName);
+  }
+
+  createChannel(username:string, groupName:string, channelName:string) {
+    let body = {
+      'username': username,
+      'groupName': groupName,
+      'channelName': channelName
+    };
+    return this.http.post('api/channel/create', JSON.stringify(body), this.genHeadersJSON());
   }
 }

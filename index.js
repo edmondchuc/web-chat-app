@@ -210,3 +210,23 @@ app.post('/api/createGroup', (req, res) => {
         res.send(groups);
     });
 });
+
+app.post('/api/channel/create', (req, res) => {
+    console.log(`POST request at /api/channel/create`);
+    console.log(req.body);
+    const username = req.body.username;
+    const groupName = req.body.groupName;
+    const channelName = req.body.channelName;
+
+    console.log('\tLoading data...');
+    retrieveUsers((users) => {
+        users[username].groups.forEach(group => {
+            if(group.name === groupName) {
+                console.log(`\tAdding channel ${channelName} to group ${groupName}`);
+                group.channels.push(channelName);
+                writeUsers(users);
+                res.send(group.channels);
+            }
+        });
+    });
+});

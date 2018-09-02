@@ -12,6 +12,11 @@ export class GroupComponent implements OnInit {
   username:string = '';
   channels = [];
 
+  isGroupAdmin = false;
+  isSuperAdmin = false;
+
+  createChannelName:string = '';
+
   userData;
 
   constructor(private router:Router, private usersService:UsersService) { 
@@ -24,6 +29,8 @@ export class GroupComponent implements OnInit {
     this.usersService.getUser(this.username).subscribe(
       data => {
         this.userData = data;
+        this.isGroupAdmin = this.userData.groupAdmin;
+        this.isSuperAdmin = this.userData.superAdmin;
       },
       err => {
         console.error
@@ -54,6 +61,27 @@ export class GroupComponent implements OnInit {
     console.log(`Viewing channel ${channel}`);
     localStorage.setItem('currentChannel', channel);
     this.router.navigateByUrl('/channel');
+  }
+
+  createChannel() {
+    if(this.createChannelName === '') {
+      alert('New channel name cannot be empty');
+      return;
+    }
+    console.log(`Creating new channel ${this.createChannelName}`);
+    this.usersService.createChannel(this.username, this.groupName, this.createChannelName).subscribe(
+      data => {
+        console.log('New list of channels received');
+        console.log(data);
+        this.channels = data;
+      },
+      err => {
+        console.error;
+      },
+      () => {
+        console.log('Creating new channel completed');
+      }
+    );
   }
 
 }

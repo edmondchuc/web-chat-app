@@ -103,26 +103,25 @@ export class DashboardComponent implements OnInit {
   createGroup() {
     if(this.allGroups.includes(this.createGroupName)) {
       alert(`Group ${this.createGroupName} already exists`);
+      return;
     }
-    else {
-      console.log(`Creating group ${this.createGroupName}`);
+    console.log(`Creating group ${this.createGroupName}`);
 
-      this.usersService.createGroup(this.username, this.createGroupName)
-      .subscribe(
-        (data) => {
-          console.log(data);
-          console.log('POST call successful. Sent ' + data);
-          this.allGroups = data;
-          console.log(this.allGroups);
-        },
-        (err) => {
-          console.log('Error in POST call. Error: ' + err);
-        },
-        () => {
-          console.log('POST call completed.');
-        }
-      );
-    }
+    this.usersService.createGroup(this.username, this.createGroupName)
+    .subscribe(
+      (data) => {
+        console.log(data);
+        console.log('POST call successful. Sent ' + data);
+        this.allGroups = data;
+        console.log(this.allGroups);
+      },
+      (err) => {
+        console.log('Error in POST call. Error: ' + err);
+      },
+      () => {
+        console.log('POST call completed.');
+      }
+    );
   }
 
   getGroups() {
