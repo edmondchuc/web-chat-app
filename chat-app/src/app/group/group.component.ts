@@ -52,6 +52,8 @@ export class GroupComponent implements OnInit {
 
   viewChannel(channel) {
     console.log(`Viewing channel ${channel}`);
+    localStorage.setItem('currentChannel', channel);
+    this.router.navigateByUrl('/channel');
   }
 
 }

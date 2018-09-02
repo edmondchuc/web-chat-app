@@ -1,5 +1,8 @@
 <h1 class="title is-1">{{title}}</h1>
-<h2 class="subtitle is-3">Welcome {{username}}</h2>
+<h2 class="subtitle is-3" *ngIf="isSuperAdmin && isGroupAdmin">Welcome {{username}}, you are a super admin</h2>
+<h2 class="subtitle is-3" *ngIf="!isGroupAdmin">Welcome {{username}}</h2>
+<h2 class="subtitle is-3" *ngIf="isGroupAdmin && !isSuperAdmin">Welcome {{username}}, you are a group admin</h2>
+
 <div class="content">
   <p>
     Your email is registered as: {{email}}
@@ -15,14 +18,27 @@
   <button (click)="logOut()">Log out</button>
 </div>
 
+
+<div *ngIf="isGroupAdmin || isSuperAdmin" class="container">
+    <div class="notification">
+      <form (submit)="createGroup($event)">
+        <div class="field has-addons has-addons-centered">
+            <label class="label is-large">New group name:</label>
+            <div class="control">
+                <input class="input" type="text" placeholder="group name" [(ngModel)]='createGroupName' id='createGroupName' name='createGroupName'>
+            </div>
+            <div class="control">
+              <button class="button is-primary">Create group</button>
+            </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <h2 class="title is-3">Your groups:</h2>
 <ul *ngIf="groups">
     <li *ngFor="let group of groups">
         Group: {{group.name}} <button (click)="viewGroup(group)">View channels</button>
     </li>
 </ul>
 
-<!-- <ul *ngIf="showChannelsBool">
-    <li *ngFor="let channel of channels">
-        Channel: {{channel}}
-    </li>
-</ul> -->

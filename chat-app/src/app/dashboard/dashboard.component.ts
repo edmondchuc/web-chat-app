@@ -17,6 +17,9 @@ export class DashboardComponent implements OnInit {
   showChannelsBool = false;
   title:string = 'Dashboard';
 
+  isGroupAdmin = false;
+  isSuperAdmin = false;
+
   userData;
 
   constructor(private usersService:UsersService, private router:Router) {
@@ -42,7 +45,8 @@ export class DashboardComponent implements OnInit {
         // update data (email, groups, channels, admin privileges)
         this.email = this.userData.email;
         this.groups = this.userData.groups
-        // this.showGroups();
+        this.isGroupAdmin = this.userData.groupAdmin;
+        this.isSuperAdmin = this.userData.superAdmin;
       }
     );
   }
@@ -74,27 +78,15 @@ export class DashboardComponent implements OnInit {
    * @param group The group object
    */
   viewGroup(group) {
+    console.log(`Viewing group ${group.name}`);
     localStorage.setItem('currentGroup', group.name);
     this.router.navigateByUrl('/group');
   }
 
-  // viewChannel(group) {
-  //   this.channels = group.channels;
-  //   console.log(this.channels);
-  //   this.showChannels(group);
-  // }
+  createGroupName:string = '';
 
-  // private showChannels(group) {
-  //   this.title = `Group: ${group.name}`;
-  //   this.showGroupsBool = false;
-  //   this.showChannelsBool = true;
-  // }
-
-  // private showGroups() {
-  //   this.title = 'Dashboard'
-  //   this.showGroupsBool = true;
-  //   this.showChannelsBool = false;
+  createGroup() {
+    console.log(`creating group ${this.createGroupName}`);
   }
-
 
 }

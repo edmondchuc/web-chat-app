@@ -1,1 +1,71 @@
-{"Bob":{"email":"","superAdmin":true,"groupAdmin":true,"groups":[{"newbies":{"channels":["general","help"]}},{"food":{"channels":["pizza","cakes"]}}]},"Dylan":{"email":"dylanprior@hotmail.com","superAdmin":true,"groupAdmin":true,"groups":[{"newbies":{"channels":["general","help"]}},{"food":{"channels":["pizza","cakes"]}}]},"Edmond":{"email":"edmond.chuc@outlook.com","superAdmin":false,"groupAdmin":false,"groups":[{"name":"newbies","isGroupAdmin":false,"channels":["general","help"]},{"name":"general","isGroupAdmin":false,"channels":["chitchat","topic of the day"]}]},"null":{"email":"","superAdmin":false,"groupAdmin":false,"groups":[{"name":"newbies","isGroupAdmin":false,"channels":["general","help"]},{"name":"general","isGroupAdmin":false,"channels":["chitchat","topic of the day"]}]}}
+{
+    "Super": {
+        "email": "super@admin.com",
+        "superAdmin": true,
+        "groupAdmin": true,
+        "groups": [
+            {
+                "name": "newbies",
+                "isGroupAdmin": false,
+                "channels": [
+                    "general",
+                    "help"
+                ]
+            },
+            {
+                "name": "general",
+                "isGroupAdmin": false,
+                "channels": [
+                    "chitchat",
+                    "topic of the day"
+                ]
+            }
+        ]
+    },
+    "Edmond": {
+        "email": "edmond.chuc@outlook.com",
+        "superAdmin": false,
+        "groupAdmin": true,
+        "groups": [
+            {
+                "name": "newbies",
+                "isGroupAdmin": false,
+                "channels": [
+                    "general",
+                    "help"
+                ]
+            },
+            {
+                "name": "general",
+                "isGroupAdmin": false,
+                "channels": [
+                    "chitchat",
+                    "topic of the day"
+                ]
+            }
+        ]
+    },
+    "Bob": {
+        "email": "bob@bobsworld.com",
+        "superAdmin": false,
+        "groupAdmin": false,
+        "groups": [
+            {
+                "name": "newbies",
+                "isGroupAdmin": false,
+                "channels": [
+                    "general",
+                    "help"
+                ]
+            },
+            {
+                "name": "general",
+                "isGroupAdmin": false,
+                "channels": [
+                    "chitchat",
+                    "topic of the day"
+                ]
+            }
+        ]
+    }
+}

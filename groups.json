@@ -1,12 +1,19 @@
-[
-    {
-        "name": "Artificially Unintelligent",
-        "channels": ["General", "Text"],
-        "users": ["Bob", "Sally"]
-    },
-    {
-        "name": "Another group",
-        "channels": ["another", "test"],
-        "users": ["Bob", "Sally"]
-    }
-]
+{
+    "groups": [
+        {
+            "name": "Newcomer",
+            "channels": ["Welcome", "Help"],
+            "users": ["Super", "Edmond", "Bob"]
+        },
+        {
+            "name": "Artificially Unintelligent",
+            "channels": ["General", "Text"],
+            "users": ["Super", "Edmond"]
+        },
+        {
+            "name": "Another group",
+            "channels": ["another", "test"],
+            "users": ["Bob", "Edmond"]
+        }
+    ]
+}
