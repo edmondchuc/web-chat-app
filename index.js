@@ -504,6 +504,9 @@ app.delete('/api/removeUserFromSystem/:username', (req, res) => {
     console.log('DELETE request at /api/removeUserFromSystem/:username');
     const username = req.params.username;
     retrieveUsers((users) => {
-        
+        users[username] = undefined;
+        writeUsers(users, () => {
+            res.send(users);
+        });
     });
 });

@@ -203,6 +203,8 @@ export class DashboardComponent implements OnInit {
     this.usersService.removeUserFromSystem(username).subscribe(
       data => {
         console.log('Received data from removing user from system');
+        this.allUsers = data;
+        this.updateAllUsersList();
       },
       err => {
         console.error;
