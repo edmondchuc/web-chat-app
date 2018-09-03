@@ -57,6 +57,10 @@
   <br>
   <br>
   <h2 class="title is-3">Users in chat system:</h2>
+  <input type="text" placeholder="username" [(ngModel)]='usernameMakeAdmin' id='usernameMakeAdmin' name='usernameMakeAdmin'>
+  <button (click)="userMakeAdminGroup()">Make user a group admin</button>
+  <button (click)="userMakeAdminSuper()">Make user a super admin</button>
+  <br>
   <ul>
       <li *ngFor="let user of listOfUsers">
           User: {{user}} 

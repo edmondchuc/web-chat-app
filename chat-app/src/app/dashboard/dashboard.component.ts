@@ -31,6 +31,8 @@ export class DashboardComponent implements OnInit {
 
   listOfUsers = [];
 
+  usernameMakeAdmin:string = '';
+
   constructor(private usersService:UsersService, private router:Router, private ref: ChangeDetectorRef) {
     this.getUser();
    }
@@ -213,5 +215,37 @@ export class DashboardComponent implements OnInit {
         console.log('Completed removing user from system');
       }
     );
+  }
+
+  userMakeAdminGroup() {
+    if(this.usernameMakeAdmin === '') {
+      alert('Username cannot be blank');
+      return;
+    }
+    if(!this.listOfUsers.includes(this.usernameMakeAdmin)) {
+      alert(`User ${this.usernameMakeAdmin} does not exist`);
+      return;
+    }
+    if(this.allUsers[this.usernameMakeAdmin].groupAdmin) {
+      alert('This user is already a group admin');
+      return;
+    }
+    console.log(`Making user ${this.usernameMakeAdmin} group admin`);
+  }
+
+  userMakeAdminSuper() {
+    if(this.usernameMakeAdmin === '') {
+      alert('Username cannot be blank');
+      return;
+    }
+    if(!this.listOfUsers.includes(this.usernameMakeAdmin)) {
+      alert(`User ${this.usernameMakeAdmin} does not exist`);
+      return;
+    }
+    if(this.allUsers[this.usernameMakeAdmin].superAdmin) {
+      alert('This user is already a super admin');
+      return;
+    }
+    console.log(`Making user ${this.usernameMakeAdmin} super admin`);
   }
 }
