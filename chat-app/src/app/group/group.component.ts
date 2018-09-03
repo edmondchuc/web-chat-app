@@ -106,6 +106,10 @@ export class GroupComponent implements OnInit {
       alert(`Cannot remove default channel ${channel}`);
       return;
     }
+    if(this.groupName === 'general' || this.groupName === 'newbies') {
+      alert('Cannot remove default channels in default groups');
+      return;
+    }
     console.log(`Removing channel ${channel}`);
     this.usersService.removeChannel(this.username, this.groupName, channel).subscribe(
       data => {

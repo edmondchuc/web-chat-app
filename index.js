@@ -244,11 +244,13 @@ app.post('/api/channel/create', (req, res) => {
         console.log(`\tAdding channel ${channelName} to group ${groupName}`);
         for(user in users) {
             if(users.hasOwnProperty(user)) {
-                for(group of users[user].groups) {
-                    // console.log(group.name);
-                    if(group.name == groupName) {
-                        if(!group.channels.includes(channelName)) {
-                            group.channels.push(channelName);
+                if(users[user].groupAdmin) {
+                    for(group of users[user].groups) {
+                        // console.log(group.name);
+                        if(group.name == groupName) {
+                            if(!group.channels.includes(channelName)) {
+                                group.channels.push(channelName);
+                            }
                         }
                     }
                 }
@@ -438,5 +440,63 @@ app.post('/api/group/channel/add', (req, res) => {
     const username = req.body.username;
     const groupName = req.body.groupName;
     const channelName = req.body.channelName;
-    
+    retrieveUsers((users) => {
+        if(users[username] === undefined) {
+            let user = userDataTemplate;
+            user.groups.push(
+                {
+                    "name": groupName,
+                    "channels": ["general", channelName]
+                }
+            );
+            // addUser(username, user);
+            users[username] = user;
+            console.log('Adding new user');
+        }
+        else {
+            let exists = false;
+            for(let group of users[username].groups) {
+                if(group.name === groupName) {
+                    exists = true;
+                    group.channels.push(channelName);
+                    break;
+                }
+            }
+
+            if(!exists) {
+                users[username].groups.push(
+                    {
+                        "name": groupName,
+                        "channels": ["general", channelName]
+                    }
+                );
+                console.log('Adding existing user to group');
+            }
+        }
+        writeUsers(users, () => {
+            // console.log(users);
+            retrieveUsers((users) => {
+                res.send(users);
+            })
+        });
+    });
+});
+
+app.delete('/api/removeUserFromChannel/:groupName.:channelName.:username', (req, res) => {
+    console.log('DELETE request at /api/remove/:groupName.:channelName.:username');
+    const username = req.params.username;
+    const groupName = req.params.groupName;
+    const channelName = req.params.channelName;
+    retrieveUsers((users) => {
+        for(group of users[username].groups) {
+            if(group.name === groupName) {
+                console.log(group.channels);
+                console.log(group.channels.indexOf(channelName));
+                group.channels.splice(group.channels.indexOf(channelName), 1);
+            }
+        }
+        writeUsers(users, () => {
+            res.send(users);
+        });
+    });
 });

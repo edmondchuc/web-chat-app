@@ -15,14 +15,15 @@
                 "name": "general",
                 "channels": [
                     "general",
-                    "chitchat"
+                    "chitchat",
+                    "topic of the day"
                 ]
             },
             {
                 "name": "Test",
                 "channels": [
                     "general",
-                    "Test"
+                    "Test2"
                 ]
             }
         ]
@@ -51,7 +52,7 @@
                 "name": "Test",
                 "channels": [
                     "general",
-                    "Test"
+                    "Test2"
                 ]
             }
         ]
@@ -72,7 +73,8 @@
                 "name": "general",
                 "channels": [
                     "general",
-                    "chitchat"
+                    "chitchat",
+                    "topic of the day"
                 ]
             },
             {
@@ -84,7 +86,7 @@
         ]
     },
     "Spencer": {
-        "email": "",
+        "email": "spencer@work.com",
         "superAdmin": false,
         "groupAdmin": false,
         "groups": [
@@ -99,49 +101,15 @@
                 "name": "general",
                 "channels": [
                     "general",
-                    "chitchat"
-                ]
-            }
-        ]
-    },
-    "null": {
-        "email": "",
-        "superAdmin": false,
-        "groupAdmin": false,
-        "groups": [
-            {
-                "name": "newbies",
-                "channels": [
-                    "general",
-                    "help"
+                    "chitchat",
+                    "topic of the day"
                 ]
             },
             {
-                "name": "general",
+                "name": "Test",
                 "channels": [
                     "general",
-                    "chitchat"
-                ]
-            }
-        ]
-    },
-    "Ed": {
-        "email": "",
-        "superAdmin": false,
-        "groupAdmin": false,
-        "groups": [
-            {
-                "name": "newbies",
-                "channels": [
-                    "general",
-                    "help"
-                ]
-            },
-            {
-                "name": "general",
-                "channels": [
-                    "general",
-                    "chitchat"
+                    "Test2"
                 ]
             }
         ]

@@ -93,4 +93,8 @@ export class UsersService {
     };
     return this.http.post('api/group/channel/add', JSON.stringify(body), this.genHeadersJSON());
   } 
+
+  removeUserFromChannel(username:string, groupName:string, channelName:string) {
+    return this.http.delete('api/removeUserFromChannel/' + groupName + '.' + channelName + '.' + username);
+  }
 }

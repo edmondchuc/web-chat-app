@@ -90,17 +90,68 @@ export class ChannelComponent implements OnInit {
   }
 
   addUserToChannel() {
+    if(this.channelName === 'general') {
+      alert('Cannot add users to default channel: general');
+      return;
+    }
+    if(this.newUsername === '') {
+      alert('New user\'s username cannot be empty');
+      return;
+    }
+    if(this.groupName === 'newbies' || this.groupName === 'general') {
+      alert('Cannot add users in the default channels: newbies and general')
+      return;
+    }
+    if(this.listOfUsers.includes(this.newUsername)) {
+      alert(`User ${this.newUsername} is already in the channel`);
+      return;
+    }
     console.log(`Adding ${this.newUsername} to channel ${this.channelName}`);
     this.usersService.addUserToChannel(this.newUsername, this.groupName, this.channelName).subscribe(
       data => {
         console.log('Received data from adding user to channel');
-        // update user data
+        this.allUsers = data;
+        this.updateAllUsersList();
       },
       err => {
         console.error;
       },
       () => {
         console.log('Completed adding user to channel');
+      }
+    );
+  }
+
+  removeUser(username:string) {
+    if(this.groupName === 'newbies' || this.groupName === 'general') {
+      alert('Cannot remove users in this default channel');
+      return;
+    }
+    if(username === this.username) {
+      alert('Cannot remove yourself');
+      return;
+    }
+    // check if they are an admin, if not, then proceed
+    if(this.allUsers[username].groupAdmin) {
+      alert(`Cannot remove admin user ${username}`);
+      return;
+    }
+    if(this.channelName === 'general') {
+      alert('Cannot remove users from the default channel: general');
+      return;
+    }
+    console.log(`Removing user ${username}`);
+    this.usersService.removeUserFromChannel(username, this.groupName, this.channelName).subscribe(
+      data => {
+        console.log('Received data from removing user from channel');
+        this.allUsers = data;
+        this.updateAllUsersList();
+      },
+      err => {
+        console.error;
+      },
+      () => {
+        console.log('Completed removing user from channel request');
       }
     );
   }

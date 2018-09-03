@@ -2,9 +2,9 @@
 
 ## Current task
 ### List all users in _group_ page for all users
-* Admins will have a button to remove users
-* Admins will have an input field to add any user
-* Adding a user to the group simply adds them to the immutable _general_ channel
+* Super Admin can remove users (from JSON file)
+* Super Admin can create users with Group Admin role
+* Super Admin can create users with Super Admin role
 
 ### Issue
 * When creating new groups/channels, also add them to users who are a group admin
