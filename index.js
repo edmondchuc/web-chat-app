@@ -185,29 +185,49 @@ app.post('/api/createGroup', (req, res) => {
     console.log('\tLoading data...');
     // update groups
     retrieveUsers((users) => {
-        // create the new group
-        users[username].groups.push(
-            {
-                "name": groupName,
-                "channels": ["general"]
-            }
-        );
-        writeUsers(users);
-
-        let groups = [];
-        for(let user in users) {
+        for(user in users) {
             if(users.hasOwnProperty(user)) {
-                users[user].groups.forEach(group => {
-                    if(!groups.includes(group.name)) {
-                        groups.push(group.name);
+                // console.log(`\tPrinting users! ${user}`);
+                if(users[user].groupAdmin) {
+                    console.log(`\tUser ${user} getting added to new group and channel because of admin role`);
+                    let groupExists = false;
+                    for(group of users[user].groups) {
+                        if(group.name === groupName) {
+                            groupExists = true;
+                        }
                     }
-                });
+                    if(!groupExists) {
+                        users[user].groups.push(
+                            {
+                                "name": groupName,
+                                "channels": ["general"]
+                            }
+                        );
+                    }
+                }
             }
         }
-        console.log("\tFound groups:");
-        console.log(groups);
-        console.log('\tResponding with data on groups');
-        res.send(groups);
+        writeUsers(users, () => {
+            retrieveUsers((users) => {
+                let groups = [];
+                for(let user in users) {
+                    if(users.hasOwnProperty(user)) {
+                        for(group of users[user].groups) {
+                            if(!groups.includes(group.name)) {
+                                groups.push(group.name);
+                            }
+                        }
+                    }
+                }
+                console.log("\tFound groups:");
+                console.log(groups);
+                console.log('\tResponding with data on groups');
+                res.send(groups);
+            });
+        });
+
+        
+        
     });
 });
 
@@ -234,8 +254,8 @@ app.post('/api/channel/create', (req, res) => {
                 }
             }
         }
-        writeUsers(users, () => {
-            retrieveUsers((users) => {
+        writeUsers(users, () => { // write to disk
+            retrieveUsers((users) => { // send back a list of all channels for the group
                 for(let user in users) {
                     if(users.hasOwnProperty(user)) {
                         users[user].groups.forEach(group => {
@@ -333,5 +353,27 @@ app.get('/api/:group/channels', (req, res) => {
         console.log(`\tFinished collating channels for group ${groupName}`);
         console.log(channels);
         res.send(channels);
+    });
+});
+
+app.get('/api/:groupName/users', (req, res) => {
+    console.log('GET request at /api/:groupName/users');
+    const groupName = req.params.groupName;
+    console.log(`\tReceived groupName: ${groupName}`);
+
+    let allUsers = [];
+    retrieveUsers((users) => {
+        for(user in users) {
+            if(users.hasOwnProperty(user)) {
+                for(group of users[user].groups) {
+                    if(group.name == groupName) {
+                        if(!allUsers.includes(user)) {
+                            allUsers.push(user);
+                        }
+                    }
+                }
+            }
+        }
+        console.log(allUsers);
     });
 });

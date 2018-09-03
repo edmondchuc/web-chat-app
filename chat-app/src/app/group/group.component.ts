@@ -23,10 +23,13 @@ export class GroupComponent implements OnInit {
 
   testSuperAdmin = false;
 
+  allUsers; // all users that exist in this group
+
   constructor(private router:Router, private usersService:UsersService) { 
     this.groupName = localStorage.getItem('currentGroup');
     this.username = localStorage.getItem('username');
     this.getUser();
+    this.getGroupUsers();
   }
 
   getUser() {
@@ -135,4 +138,18 @@ export class GroupComponent implements OnInit {
     }
   }
 
+  getGroupUsers() {
+    console.log(`Function: Getting users for group ${this.groupName}`);
+    this.usersService.getGroupUsers(this.groupName).subscribe(
+      data => {
+        console.log(`\tReceived response data from GET: ${data}`);
+      },
+      err => {
+        console.error;
+      },
+      () => {
+        console.log('\tCompleted GET request of group users');
+      }
+    );
+  }
 }

@@ -64,4 +64,8 @@ export class UsersService {
   getChannels(groupName:string) {
     return this.http.get('api/' + groupName + '/channels');
   }
+
+  getGroupUsers(groupName:string) {
+    return this.http.get('api/' + groupName + '/users');
+  }
 }
