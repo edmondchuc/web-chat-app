@@ -20,6 +20,8 @@ export class ChannelComponent implements OnInit {
 
   listOfUsers = [];
 
+  newUsername:string = '';
+
   constructor(private router:Router, private usersService:UsersService) { 
     this.channelName = localStorage.getItem('currentChannel');
     this.username = localStorage.getItem('username');
@@ -83,6 +85,22 @@ export class ChannelComponent implements OnInit {
       },
       () => {
         console.log('Completed getting all user data from server');
+      }
+    );
+  }
+
+  addUserToChannel() {
+    console.log(`Adding ${this.newUsername} to channel ${this.channelName}`);
+    this.usersService.addUserToChannel(this.newUsername, this.groupName, this.channelName).subscribe(
+      data => {
+        console.log('Received data from adding user to channel');
+        // update user data
+      },
+      err => {
+        console.error;
+      },
+      () => {
+        console.log('Completed adding user to channel');
       }
     );
   }

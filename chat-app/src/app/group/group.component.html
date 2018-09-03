@@ -32,7 +32,7 @@
 
 
 <h2 class="title">Users:</h2>
-<div>
+<div *ngIf="isGroupAdmin">
   <input class="" type="text" placeholder="username" [(ngModel)]='newUsername' id='newUsername' name='newUsername'>
   <button (click)="addUserToGroup()">Add new user</button>
 </div>

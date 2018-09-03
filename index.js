@@ -431,3 +431,12 @@ app.post('/api/groups/add', (req, res) => {
         });
     });
 });
+
+app.post('/api/group/channel/add', (req, res) => {
+    console.log('POST request at /api/group/channel/add');
+    console.log(req.body);
+    const username = req.body.username;
+    const groupName = req.body.groupName;
+    const channelName = req.body.channelName;
+    
+});

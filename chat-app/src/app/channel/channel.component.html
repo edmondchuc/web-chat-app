@@ -2,7 +2,7 @@
 <h2 class="subtitle is-5">User: {{username}}</h2>
 <button (click)="logOut()">Log out</button>
 
-<div>
+<div *ngIf="isGroupAdmin">
     <input class="" type="text" placeholder="username" [(ngModel)]='newUsername' id='newUsername' name='newUsername'>
     <button (click)="addUserToChannel()">Add new user</button>
 </div>

@@ -84,4 +84,13 @@ export class UsersService {
     }
     return this.http.post('api/groups/add', JSON.stringify(body), this.genHeadersJSON());
   }
+
+  addUserToChannel(username:string, groupName:string, channelName:string) {
+    let body = {
+      "username": username,
+      "groupName": groupName,
+      "channelName": channelName
+    };
+    return this.http.post('api/group/channel/add', JSON.stringify(body), this.genHeadersJSON());
+  } 
 }
