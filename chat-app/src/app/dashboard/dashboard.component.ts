@@ -231,6 +231,17 @@ export class DashboardComponent implements OnInit {
       return;
     }
     console.log(`Making user ${this.usernameMakeAdmin} group admin`);
+    this.usersService.makeUserGroupAdmin(this.usernameMakeAdmin).subscribe(
+      data => {
+        console.log('Received new data for making user an admin');
+      },
+      err => {
+        console.error;
+      },
+      () => {
+        console.log('Completed making user request');
+      }
+    );
   }
 
   userMakeAdminSuper() {
@@ -247,5 +258,16 @@ export class DashboardComponent implements OnInit {
       return;
     }
     console.log(`Making user ${this.usernameMakeAdmin} super admin`);
+    this.usersService.makeUserSuperAdmin(this.usernameMakeAdmin).subscribe(
+      data => {
+        console.log('Received new data for making user an admin');
+      },
+      err => {
+        console.error;
+      },
+      () => {
+        console.log('Completed making user request');
+      }
+    );
   }
 }

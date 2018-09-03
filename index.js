@@ -510,3 +510,28 @@ app.delete('/api/removeUserFromSystem/:username', (req, res) => {
         });
     });
 });
+
+app.post('/api/makeUserGroupAdmin', (req, res) => {
+    console.log('POST request at /api/makeUserGroupAdmin');
+    const username = req.body.username;
+    console.log(username);
+    retrieveUsers((users) => {
+        users[username].groupAdmin = true;
+        writeUsers(users, () => {
+            res.send(users);
+        });
+    });
+});
+
+app.post('/api/makeUserSuperAdmin', (req, res) => {
+    console.log('POST request at /api/makeUserSuperAdmin');
+    const username = req.body.username;
+    console.log(username);
+    retrieveUsers((users) => {
+        users[username].superAdmin = true;
+        users[username].groupAdmin = true;
+        writeUsers(users, () => {
+            res.send(users);
+        });
+    });
+});

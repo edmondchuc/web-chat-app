@@ -101,4 +101,18 @@ export class UsersService {
   removeUserFromSystem(username:string) {
     return this.http.delete('api/removeUserFromSystem/' + username);
   }
+
+  makeUserGroupAdmin(username:string) {
+    let body = {
+      "username": username
+    }
+    return this.http.post('api/makeUserGroupAdmin', JSON.stringify(body), this.genHeadersJSON());
+  }
+
+  makeUserSuperAdmin(username:string) {
+    let body = {
+      "username": username
+    }
+    return this.http.post('api/makeUserSuperAdmin', JSON.stringify(body), this.genHeadersJSON());
+  }
 }
