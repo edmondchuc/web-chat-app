@@ -21,6 +21,8 @@ export class GroupComponent implements OnInit {
 
   allChannels; // list of channels for users with admin roles
 
+  testSuperAdmin = false;
+
   constructor(private router:Router, private usersService:UsersService) { 
     this.groupName = localStorage.getItem('currentGroup');
     this.username = localStorage.getItem('username');
@@ -34,7 +36,10 @@ export class GroupComponent implements OnInit {
         console.log('Setting user data');
         this.isGroupAdmin = this.userData.groupAdmin;
         this.isSuperAdmin = this.userData.superAdmin;
+        this.testSuperAdmin = this.userData.superAdmin;
         console.log(data);
+        console.log(`\tThis user is a group admin: ${this.isGroupAdmin}`);
+        console.log(`\tThis user is a super admin: ${this.isSuperAdmin}`);
       },
       err => {
         console.error
@@ -78,7 +83,7 @@ export class GroupComponent implements OnInit {
       data => {
         console.log('New list of channels received');
         console.log(data);
-        this.channels = data;
+        this.allChannels = data;
       },
       err => {
         console.error;
@@ -99,7 +104,7 @@ export class GroupComponent implements OnInit {
       data => {
         console.log(`New list of channels received`);
         console.log(data);
-        this.channels = data;
+        this.allChannels = data;
       },
       err => {
         console.error;
@@ -111,13 +116,14 @@ export class GroupComponent implements OnInit {
   }
 
   getChannels() {
-    console.log(`Group admin: ${this.isGroupAdmin} Super admin: ${this.isSuperAdmin}`);
+    // console.log(`Group admin: ${this.isGroupAdmin} Super admin: ${this.isSuperAdmin}`);
     if(this.isGroupAdmin || this.isSuperAdmin) {
       console.log('Admin fetching all channels');
       this.usersService.getChannels(this.groupName).subscribe(
         data => {
           console.log('Received data for all channels');
           console.log(data);
+          this.allChannels = data;
         },
         err => {
           console.error;

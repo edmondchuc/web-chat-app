@@ -217,16 +217,43 @@ app.post('/api/channel/create', (req, res) => {
     const username = req.body.username;
     const groupName = req.body.groupName;
     const channelName = req.body.channelName;
+    let channels = [];
 
     console.log('\tLoading data...');
     retrieveUsers((users) => {
-        users[username].groups.forEach(group => {
-            if(group.name === groupName) {
-                console.log(`\tAdding channel ${channelName} to group ${groupName}`);
-                group.channels.push(channelName);
-                writeUsers(users);
-                res.send(group.channels);
+        console.log(`\tAdding channel ${channelName} to group ${groupName}`);
+        for(user in users) {
+            if(users.hasOwnProperty(user)) {
+                for(group of users[user].groups) {
+                    // console.log(group.name);
+                    if(group.name == groupName) {
+                        if(!group.channels.includes(channelName)) {
+                            group.channels.push(channelName);
+                        }
+                    }
+                }
             }
+        }
+        writeUsers(users, () => {
+            retrieveUsers((users) => {
+                for(let user in users) {
+                    if(users.hasOwnProperty(user)) {
+                        users[user].groups.forEach(group => {
+                            if(group.name === groupName) {  // found the group
+                                // if channel is not in channel list, add it
+                                for(channel of group.channels) {
+                                    if(!channels.includes(channel)) {
+                                        channels.push(channel);
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+                console.log(`\tFinished collating channels for group ${groupName}`);
+                console.log(channels);
+                res.send(channels);
+            });
         });
     });
 });
@@ -237,27 +264,49 @@ app.delete('/api/channel/remove/:username.:groupName.:channelName', (req, res) =
     const username = req.params.username;
     const groupName = req.params.groupName;
     const channelName = req.params.channelName;
-    let channels;
+    let channels = [];
 
     retrieveUsers( (users) => {
         for(let user in users) { // loop over the users object's properties
             if(users.hasOwnProperty(user)) {
-                users[user].groups.forEach(group => {
+                for(group of users[user].groups) {
                     if(group.name === groupName) {
-                        // remove channel
-                        group.channels.splice(group.channels.indexOf(channelName), 1);
-                        if(user === username) {
-                            channels = group.channels;
-                            console.log(`'User's channels`);
-                            console.log(channels);
-                            res.send(channels);
+                        if(group.channels.includes(channelName)) { // remove channel
+                            group.channels.splice(group.channels.indexOf(channelName), 1);
                         }
                     }
-                });
+                }
+                // users[user].groups.forEach(group => {
+                //     if(group.name === groupName) {
+                //         // remove channel
+                //         group.channels.splice(group.channels.indexOf(channelName), 1);
+                //         if(user === username) {
+                //             channels = group.channels;
+                //             console.log(`'User's channels`);
+                //             console.log(channels);
+                //             res.send(channels);
+                //         }
+                //     }
+                // });
             }
         }
         // write to file the new changes
         writeUsers(users)
+        for(user in users) {
+            if(users.hasOwnProperty(user)) {
+                for(group of users[user].groups) {
+                    if(group.name === groupName) {
+                        for(channel of group.channels) {
+                            if(!channels.includes(channel)) {
+                                channels.push(channel);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        console.log(`\tResponding with new list of channels ${channels}`);
+        res.send(channels);
     });
 });
 
