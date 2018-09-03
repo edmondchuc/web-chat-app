@@ -20,6 +20,7 @@
 </div>
 
 <br>
+<br>
 <h2 class="title">Channels:</h2>
 <ul *ngIf="channels && (!isSuperAdmin && !isGroupAdmin)">
     <li *ngFor="let channel of channels">
@@ -34,7 +35,7 @@
 
 <br>
 <br>
-<h2 class="title">Users:</h2>
+<h2 class="title">Users in group:</h2>
 <div *ngIf="isGroupAdmin">
   <input class="" type="text" placeholder="username" [(ngModel)]='newUsername' id='newUsername' name='newUsername'>
   <button (click)="addUserToGroup()">Add new user</button>

@@ -22,6 +22,9 @@ export class ChannelComponent implements OnInit {
 
   newUsername:string = '';
 
+  messages = ['Start of the conversation...', 'Some sample chat text'];
+  message:string = '';
+
   constructor(private router:Router, private usersService:UsersService) { 
     this.channelName = localStorage.getItem('currentChannel');
     this.username = localStorage.getItem('username');
@@ -154,5 +157,9 @@ export class ChannelComponent implements OnInit {
         console.log('Completed removing user from channel request');
       }
     );
+  }
+
+  sendMessage() {
+    console.log(`User typed: ${this.message}`);
   }
 }

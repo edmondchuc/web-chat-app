@@ -9,7 +9,7 @@
 
 <br>
 <br>
-<h2 class="title is-3">Users:</h2>
+<h2 class="title is-3">Users in channel:</h2>
 <ul *ngIf="listOfUsers && (!isSuperAdmin && !isGroupAdmin)">
     <li *ngFor="let user of listOfUsers">
         User: {{user}}
@@ -20,3 +20,36 @@
         User: {{user}} <button (click)="removeUser(user)">Remove user</button>
     </li>
 </ul>
+
+
+
+
+  <!-- HERO BODY -->
+  <div class="hero-body">
+      <div class="container">
+          <div class="notification">
+            <div *ngFor="let message of messages">
+              <article class="message is-primary">
+                  <div class="message-body">
+                    {{message}}
+                  </div>
+              </article>
+            </div>
+          </div>
+        </div>
+  </div>
+
+
+  <!-- HERO FOOTER -->
+  <div class="hero-foot">
+    <div class="navbar is-fixed-bottom has-background-primary">
+        <div class="container">
+            <div class="navbar-brand">
+                <div class="navbar-item">
+                  <input [(ngModel)]="message" (keyup)="$event.keyCode == 13 && sendMessage()" />
+                  <button (click)="sendMessage()">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
