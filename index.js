@@ -409,7 +409,9 @@ app.post('/api/groups/add', (req, res) => {
                     "channels": ["general"]
                 }
             );
-            addUser(username, user);
+            // addUser(username, user);
+            users[username] = user;
+            console.log('Adding new user');
         }
         else {
             users[username].groups.push(
@@ -418,10 +420,14 @@ app.post('/api/groups/add', (req, res) => {
                     "channels": ["general"]
                 }
             );
+            console.log('Adding existing user to group');
         }
         writeUsers(users, () => {
             console.log(users);
-            getAllUsersInGroup(groupName, res);
+            // getAllUsersInGroup(groupName, res);
+            retrieveUsers((users) => {
+                res.send(users);
+            })
         });
     });
 });

@@ -207,6 +207,20 @@ export class GroupComponent implements OnInit {
     );
   }
 
+  updateAllUsersList() {
+    this.allUsers = [];
+    for(let user in this.allUserData) {
+      if(this.allUserData.hasOwnProperty(user)) {
+        for(let group of this.allUserData[user].groups) {
+          console.log(group);
+          if(group.name === this.groupName) {
+            this.allUsers.push(user);
+          }
+        }
+      }
+    }
+  }
+
   addUserToGroup() {
     if(this.allUsers.includes(this.newUsername)) {
       alert(`User ${this.newUsername} is already in the group`);
@@ -217,7 +231,8 @@ export class GroupComponent implements OnInit {
       data => {
         console.log('Received data from adding user to group');
         console.log(data);
-        this.allUsers = data;
+        this.allUserData = data;
+        this.updateAllUsersList();
       },
       err => {
         console.error;
