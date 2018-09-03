@@ -25,6 +25,10 @@ export class GroupComponent implements OnInit {
 
   allUsers; // all users that exist in this group
 
+  allUserData; // the data of all users
+
+  newUsername:string = '';
+
   constructor(private router:Router, private usersService:UsersService) { 
     this.groupName = localStorage.getItem('currentGroup');
     this.username = localStorage.getItem('username');
@@ -43,6 +47,14 @@ export class GroupComponent implements OnInit {
         console.log(data);
         console.log(`\tThis user is a group admin: ${this.isGroupAdmin}`);
         console.log(`\tThis user is a super admin: ${this.isSuperAdmin}`);
+         // update channels list
+        this.userData.groups.forEach(group => {
+          if(group.name === this.groupName) {
+            this.channels = group.channels;
+          }
+        });
+        this.getChannels();
+        this.getDataAllUsers();
       },
       err => {
         console.error
@@ -50,14 +62,6 @@ export class GroupComponent implements OnInit {
       () => {
         console.log('\tUser retrieved')
         console.log(this.userData);
-
-        // update channels list
-        this.userData.groups.forEach(group => {
-          if(group.name === this.groupName) {
-            this.channels = group.channels;
-          }
-        });
-        this.getChannels();
       }
     );
   }
@@ -142,7 +146,9 @@ export class GroupComponent implements OnInit {
     console.log(`Function: Getting users for group ${this.groupName}`);
     this.usersService.getGroupUsers(this.groupName).subscribe(
       data => {
-        console.log(`\tReceived response data from GET: ${data}`);
+        console.log(`\tReceived response data from GET: `);
+        console.log(data);
+        this.allUsers = data;
       },
       err => {
         console.error;
@@ -151,5 +157,61 @@ export class GroupComponent implements OnInit {
         console.log('\tCompleted GET request of group users');
       }
     );
+  }
+
+  getDataAllUsers() {
+    if(!this.isGroupAdmin) return;
+    console.log('Getting all user data from server');
+    this.usersService.getDataAllUsers().subscribe(
+      data => {
+        console.log('Received all user data from server');
+        console.log(data);
+        this.allUserData = data;
+      },
+      err => {
+        console.error;
+      },
+      () => {
+        console.log('Completed getting all user data from server');
+      }
+    );
+  }
+
+  removeUser(user:string) {
+    if(this.groupName === 'newbies' || this.groupName === 'general') {
+      alert('Cannot remove users in this default channel');
+      return;
+    }
+    if(user === this.username) {
+      alert('Cannot remove yourself');
+      return;
+    }
+    // check if they are an admin, if not, then proceed
+    if(this.allUserData[user].groupAdmin) {
+      alert(`Cannot remove admin user ${user}`);
+      return;
+    }
+    console.log(`Removing user ${user}`);
+    this.usersService.removeUserInGroup(user, this.groupName).subscribe(
+      data => {
+        console.log('Received new list of users');
+        console.log(data);
+        this.allUsers = data;
+      },
+      err => {
+        console.error;
+      },
+      () => {
+        console.log(`\tFinished removing user ${user}`);
+      }
+    );
+  }
+
+  addUserToGroup() {
+    if(this.allUsers.includes(this.newUsername)) {
+      alert(`User ${this.newUsername} is already in the group`);
+      return;
+    }
+    console.log(`Adding new user ${this.newUsername} to group`);
   }
 }

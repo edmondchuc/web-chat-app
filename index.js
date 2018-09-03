@@ -296,18 +296,6 @@ app.delete('/api/channel/remove/:username.:groupName.:channelName', (req, res) =
                         }
                     }
                 }
-                // users[user].groups.forEach(group => {
-                //     if(group.name === groupName) {
-                //         // remove channel
-                //         group.channels.splice(group.channels.indexOf(channelName), 1);
-                //         if(user === username) {
-                //             channels = group.channels;
-                //             console.log(`'User's channels`);
-                //             console.log(channels);
-                //             res.send(channels);
-                //         }
-                //     }
-                // });
             }
         }
         // write to file the new changes
@@ -356,11 +344,7 @@ app.get('/api/:group/channels', (req, res) => {
     });
 });
 
-app.get('/api/:groupName/users', (req, res) => {
-    console.log('GET request at /api/:groupName/users');
-    const groupName = req.params.groupName;
-    console.log(`\tReceived groupName: ${groupName}`);
-
+function getAllUsersInGroup(groupName, res) {
     let allUsers = [];
     retrieveUsers((users) => {
         for(user in users) {
@@ -374,6 +358,38 @@ app.get('/api/:groupName/users', (req, res) => {
                 }
             }
         }
-        console.log(allUsers);
+        console.log(`\tResponding back with all users ${allUsers}`);
+        res.send(allUsers);
+    });
+}
+
+app.get('/api/:groupName/users', (req, res) => {
+    console.log('GET request at /api/:groupName/users');
+    const groupName = req.params.groupName;
+    console.log(`\tReceived groupName: ${groupName}`);
+    getAllUsersInGroup(groupName, res);
+});
+
+app.get('/api/users/all', (req, res) => {
+    console.log('GET request at /api/users/all');
+    retrieveUsers((users) => {
+        res.send(users);
+    });
+});
+
+// remove user from a group
+app.delete('/api/remove/:groupName.:username', (req, res) => {
+    console.log('DELETE request at /api/:groupName/:username/remove');
+    let username = req.params.username;
+    let groupName = req.params.groupName;
+    retrieveUsers((users) => {
+        for(group of users[username].groups) {
+            if(group.name === groupName) {
+                users[username].groups.splice(group, 1);
+            }
+        }
+        writeUsers(users, () => { // get the new list of names in the group
+            getAllUsersInGroup(groupName, res);
+        })
     });
 });

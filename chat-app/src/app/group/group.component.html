@@ -29,3 +29,21 @@
         Group: {{channel}} <button (click)="viewChannel(channel)">View channel</button> <button (click)="removeChannel(channel)">Remove channel</button>
     </li>
 </ul>
+
+
+<h2 class="title">Users:</h2>
+<div>
+  <input class="" type="text" placeholder="username" [(ngModel)]='newUsername' id='newUsername' name='newUsername'>
+  <button (click)="addUserToGroup()">Add new user</button>
+</div>
+
+<ul *ngIf="allUsers && (!isSuperAdmin && !isGroupAdmin)">
+    <li *ngFor="let user of allUsers">
+        User: {{user}}
+    </li>
+</ul>
+<ul *ngIf="allUsers && (isGroupAdmin)">
+    <li *ngFor="let user of allUsers">
+        User: {{user}} <button (click)="removeUser(user)">Remove user</button>
+    </li>
+</ul>

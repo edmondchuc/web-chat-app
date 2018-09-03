@@ -68,4 +68,12 @@ export class UsersService {
   getGroupUsers(groupName:string) {
     return this.http.get('api/' + groupName + '/users');
   }
+
+  getDataAllUsers() {
+    return this.http.get('api/users/all');
+  }
+
+  removeUserInGroup(username:string, groupName:string) {
+    return this.http.delete('api/remove/' + groupName + '.' + username);
+  }
 }
