@@ -27,6 +27,10 @@ export class DashboardComponent implements OnInit {
   // groups retrieved if admin
   allGroups;
 
+  allUsers;
+
+  listOfUsers = [];
+
   constructor(private usersService:UsersService, private router:Router, private ref: ChangeDetectorRef) {
     this.getUser();
    }
@@ -54,6 +58,7 @@ export class DashboardComponent implements OnInit {
         this.isSuperAdmin = this.userData.superAdmin;
 
         this.getGroups(); // get the groups if this user is admin
+        this.getDataAllUsers();
       }
     );
   }
@@ -163,4 +168,48 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  updateAllUsersList() {
+    this.listOfUsers = [];
+    for(let user in this.allUsers) {
+      this.listOfUsers.push(user);
+    }
+  }
+
+  getDataAllUsers() {
+    if(this.isSuperAdmin) {
+      this.usersService.getDataAllUsers().subscribe(
+        data => {
+          console.log('Received all user data from server');
+          // console.log(data);
+          this.allUsers = data;
+          this.updateAllUsersList();
+        },
+        err => {
+          console.error;
+        },
+        () => {
+          console.log('Completed getting all user data from server');
+        }
+      );
+    }
+  }
+
+  removeUserFromSystem(username:string) {
+    if(username === 'Super') {
+      alert('Cannot remove user Super');
+      return;
+    }
+    console.log(`Removing user from system ${username}`);
+    this.usersService.removeUserFromSystem(username).subscribe(
+      data => {
+        console.log('Received data from removing user from system');
+      },
+      err => {
+        console.error;
+      },
+      () => {
+        console.log('Completed removing user from system');
+      }
+    );
+  }
 }

@@ -7,6 +7,9 @@
     <button (click)="addUserToChannel()">Add new user</button>
 </div>
 
+<br>
+<br>
+<h2 class="title is-3">Users:</h2>
 <ul *ngIf="listOfUsers && (!isSuperAdmin && !isGroupAdmin)">
     <li *ngFor="let user of listOfUsers">
         User: {{user}}

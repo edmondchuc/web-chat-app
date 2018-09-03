@@ -4,6 +4,7 @@
 <h2 class="subtitle is-3" *ngIf="isGroupAdmin && !isSuperAdmin">Welcome {{username}}, you are a group admin</h2>
 
 <div class="content">
+  <br>
   <p>
     Your email is registered as: {{email}}
   </p>
@@ -14,7 +15,8 @@
     </div>
   </form>
 
-  
+  <br>
+  <br>
   <button (click)="logOut()">Log out</button>
 </div>
 
@@ -35,7 +37,8 @@
     </div>
   </div>
 
-
+<br>
+<br>
 <h2 class="title is-3">Your groups:</h2>
 <ul *ngIf="groups && (!isGroupAdmin && !isSuperAdmin)">
     <li *ngFor="let group of groups">
@@ -49,3 +52,16 @@
         Group: {{group}} <button (click)="viewGroup(group)">View channels</button> <button (click)="removeGroup(group)">Remove group</button>
     </li>
 </ul>
+
+<div *ngIf="isSuperAdmin">
+  <br>
+  <br>
+  <h2 class="title is-3">Users in chat system:</h2>
+  <ul>
+      <li *ngFor="let user of listOfUsers">
+          User: {{user}} 
+          <button (click)="removeUserFromSystem(user)">Remove user from system</button>
+      </li>
+  </ul>
+</div>
+

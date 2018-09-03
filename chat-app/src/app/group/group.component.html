@@ -1,5 +1,6 @@
 <h1 class="title is-1">Group: {{groupName}}</h1>
 <h2 class="subtitle is-5">User: {{username}}</h2>
+<br>
 <button (click)="logOut()">Log out</button>
 
 <div *ngIf="isGroupAdmin || isSuperAdmin" class="container">
@@ -18,6 +19,7 @@
   </div>
 </div>
 
+<br>
 <h2 class="title">Channels:</h2>
 <ul *ngIf="channels && (!isSuperAdmin && !isGroupAdmin)">
     <li *ngFor="let channel of channels">
@@ -30,7 +32,8 @@
     </li>
 </ul>
 
-
+<br>
+<br>
 <h2 class="title">Users:</h2>
 <div *ngIf="isGroupAdmin">
   <input class="" type="text" placeholder="username" [(ngModel)]='newUsername' id='newUsername' name='newUsername'>

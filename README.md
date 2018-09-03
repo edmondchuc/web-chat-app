@@ -5,6 +5,7 @@
 * Super Admin can remove users (from JSON file)
 * Super Admin can create users with Group Admin role
 * Super Admin can create users with Super Admin role
+* Add chat textbox in channels
 
 ### Issue
 * When creating new groups/channels, also add them to users who are a group admin

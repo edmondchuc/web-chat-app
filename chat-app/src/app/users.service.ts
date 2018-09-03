@@ -97,4 +97,8 @@ export class UsersService {
   removeUserFromChannel(username:string, groupName:string, channelName:string) {
     return this.http.delete('api/removeUserFromChannel/' + groupName + '.' + channelName + '.' + username);
   }
+
+  removeUserFromSystem(username:string) {
+    return this.http.delete('api/removeUserFromSystem/' + username);
+  }
 }
