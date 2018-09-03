@@ -114,6 +114,7 @@ app.get('/api/user', (req, res) => {
     }));
 });
 
+// get all the unique groups and send back the response
 function getGroups(res) {
     retrieveUsers((users) => {
         let groups = [];
@@ -152,6 +153,7 @@ app.post('/api/email', (req, res) => {
     res.send(req.body);
 });
 
+// Remove a group
 app.delete('/api/removeGroup/:groupName', (req, res) => {
     console.log('DELETE request at /api/removeGroup');
     const groupName = req.params.groupName;
@@ -176,6 +178,7 @@ app.delete('/api/removeGroup/:groupName', (req, res) => {
     });
 });
 
+// create a new group
 app.post('/api/createGroup', (req, res) => {
     console.log('POST request at /api/createGroup');
     let username = req.body.username;
@@ -231,6 +234,7 @@ app.post('/api/createGroup', (req, res) => {
     });
 });
 
+// create new channel in a group
 app.post('/api/channel/create', (req, res) => {
     console.log(`POST request at /api/channel/create`);
     console.log(req.body);
@@ -280,6 +284,7 @@ app.post('/api/channel/create', (req, res) => {
     });
 });
 
+// remove channel of a group
 app.delete('/api/channel/remove/:username.:groupName.:channelName', (req, res) => {
     console.log('DELETE request at /api/channel/remove:groupName.:channelName');
     console.log(req.params);
@@ -320,6 +325,7 @@ app.delete('/api/channel/remove/:username.:groupName.:channelName', (req, res) =
     });
 });
 
+// get all channels in a group
 app.get('/api/:group/channels', (req, res) => {
     console.log('GET request at /api/:group/channels');
     const groupName = req.params.group;
@@ -346,6 +352,7 @@ app.get('/api/:group/channels', (req, res) => {
     });
 });
 
+// get all the users in the group
 function getAllUsersInGroup(groupName, res) {
     let allUsers = [];
     retrieveUsers((users) => {
@@ -365,6 +372,7 @@ function getAllUsersInGroup(groupName, res) {
     });
 }
 
+// get all the users in a group
 app.get('/api/:groupName/users', (req, res) => {
     console.log('GET request at /api/:groupName/users');
     const groupName = req.params.groupName;
@@ -372,6 +380,7 @@ app.get('/api/:groupName/users', (req, res) => {
     getAllUsersInGroup(groupName, res);
 });
 
+// get all users and their data
 app.get('/api/users/all', (req, res) => {
     console.log('GET request at /api/users/all');
     retrieveUsers((users) => {
@@ -398,6 +407,7 @@ app.delete('/api/remove/:groupName.:username', (req, res) => {
     });
 });
 
+// add user to a group
 app.post('/api/groups/add', (req, res) => {
     console.log('POST request at /api/groups/add');
     const username = req.body.username;
@@ -434,6 +444,7 @@ app.post('/api/groups/add', (req, res) => {
     });
 });
 
+// add new user to a channel in a group
 app.post('/api/group/channel/add', (req, res) => {
     console.log('POST request at /api/group/channel/add');
     console.log(req.body);
@@ -482,6 +493,7 @@ app.post('/api/group/channel/add', (req, res) => {
     });
 });
 
+// remove user from channel
 app.delete('/api/removeUserFromChannel/:groupName.:channelName.:username', (req, res) => {
     console.log('DELETE request at /api/remove/:groupName.:channelName.:username');
     const username = req.params.username;
@@ -500,6 +512,8 @@ app.delete('/api/removeUserFromChannel/:groupName.:channelName.:username', (req,
         });
     });
 });
+
+// remove user form the system
 app.delete('/api/removeUserFromSystem/:username', (req, res) => {
     console.log('DELETE request at /api/removeUserFromSystem/:username');
     const username = req.params.username;
@@ -511,6 +525,7 @@ app.delete('/api/removeUserFromSystem/:username', (req, res) => {
     });
 });
 
+// make a user a group admin
 app.post('/api/makeUserGroupAdmin', (req, res) => {
     console.log('POST request at /api/makeUserGroupAdmin');
     const username = req.body.username;
@@ -523,6 +538,7 @@ app.post('/api/makeUserGroupAdmin', (req, res) => {
     });
 });
 
+// make a user a super admin
 app.post('/api/makeUserSuperAdmin', (req, res) => {
     console.log('POST request at /api/makeUserSuperAdmin');
     const username = req.body.username;
