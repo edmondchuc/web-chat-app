@@ -69,17 +69,16 @@
                 ]
             },
             {
-                "name": "Test",
-                "channels": [
-                    "general",
-                    "Test"
-                ]
-            },
-            {
                 "name": "general",
                 "channels": [
                     "general",
                     "chitchat"
+                ]
+            },
+            {
+                "name": "Test",
+                "channels": [
+                    "general"
                 ]
             }
         ]

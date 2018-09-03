@@ -165,7 +165,7 @@ export class GroupComponent implements OnInit {
     this.usersService.getDataAllUsers().subscribe(
       data => {
         console.log('Received all user data from server');
-        console.log(data);
+        // console.log(data);
         this.allUserData = data;
       },
       err => {
@@ -195,7 +195,7 @@ export class GroupComponent implements OnInit {
     this.usersService.removeUserInGroup(user, this.groupName).subscribe(
       data => {
         console.log('Received new list of users');
-        console.log(data);
+        // console.log(data);
         this.allUsers = data;
       },
       err => {
@@ -222,6 +222,14 @@ export class GroupComponent implements OnInit {
   }
 
   addUserToGroup() {
+    if(this.newUsername === '') {
+      alert('New user\'s username cannot be empty');
+      return;
+    }
+    if(this.groupName === 'newbies' || this.groupName === 'general') {
+      alert('Cannot add users in the default channels: newbies and general')
+      return;
+    }
     if(this.allUsers.includes(this.newUsername)) {
       alert(`User ${this.newUsername} is already in the group`);
       return;
@@ -230,7 +238,7 @@ export class GroupComponent implements OnInit {
     this.usersService.addUserToGroup(this.newUsername, this.groupName).subscribe(
       data => {
         console.log('Received data from adding user to group');
-        console.log(data);
+        // console.log(data);
         this.allUserData = data;
         this.updateAllUsersList();
       },

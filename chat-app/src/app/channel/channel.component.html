@@ -1,3 +1,19 @@
 <h1 class="title is-1">Channel: {{channelName}}</h1>
 <h2 class="subtitle is-5">User: {{username}}</h2>
 <button (click)="logOut()">Log out</button>
+
+<div>
+    <input class="" type="text" placeholder="username" [(ngModel)]='newUsername' id='newUsername' name='newUsername'>
+    <button (click)="addUserToChannel()">Add new user</button>
+</div>
+
+<ul *ngIf="listOfUsers && (!isSuperAdmin && !isGroupAdmin)">
+    <li *ngFor="let user of listOfUsers">
+        User: {{user}}
+    </li>
+</ul>
+<ul *ngIf="listOfUsers && (isGroupAdmin)">
+    <li *ngFor="let user of listOfUsers">
+        User: {{user}} <button (click)="removeUser(user)">Remove user</button>
+    </li>
+</ul>
