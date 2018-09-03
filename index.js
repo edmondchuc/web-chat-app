@@ -270,12 +270,19 @@ app.get('/api/:group/channels', (req, res) => {
         for(let user in users) {
             if(users.hasOwnProperty(user)) {
                 users[user].groups.forEach(group => {
-                    console.log(group.channels);
-                    // if(groups.includes(group.name)) {
-                        
-                    // }
+                    if(group.name === groupName) {  // found the group
+                        // if channel is not in channel list, add it
+                        for(channel of group.channels) {
+                            if(!channels.includes(channel)) {
+                                channels.push(channel);
+                            }
+                        }
+                    }
                 });
             }
         }
+        console.log(`\tFinished collating channels for group ${groupName}`);
+        console.log(channels);
+        res.send(channels);
     });
 });
