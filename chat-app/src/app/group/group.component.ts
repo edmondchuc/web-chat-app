@@ -213,5 +213,18 @@ export class GroupComponent implements OnInit {
       return;
     }
     console.log(`Adding new user ${this.newUsername} to group`);
+    this.usersService.addUserToGroup(this.newUsername, this.groupName).subscribe(
+      data => {
+        console.log('Received data from adding user to group');
+        console.log(data);
+        this.allUsers = data;
+      },
+      err => {
+        console.error;
+      },
+      () => {
+        console.log(`Completed adding user ${this.newUsername} to group`);
+      }
+    );
   }
 }

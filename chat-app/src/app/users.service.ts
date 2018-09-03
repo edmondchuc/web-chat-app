@@ -76,4 +76,12 @@ export class UsersService {
   removeUserInGroup(username:string, groupName:string) {
     return this.http.delete('api/remove/' + groupName + '.' + username);
   }
+
+  addUserToGroup(username:string, groupName:string) {
+    let body = {
+      "username": username,
+      "groupName": groupName
+    }
+    return this.http.post('api/groups/add', JSON.stringify(body), this.genHeadersJSON());
+  }
 }

@@ -1,1 +1,150 @@
-{"Super":{"email":"super@admin.com","superAdmin":true,"groupAdmin":true,"groups":[{"name":"newbies","channels":["general","help"]},{"name":"general","channels":["general","chitchat"]},{"name":"Test","channels":["general","Test"]}]},"Edmond":{"email":"edmond.chuc@outlook.com","superAdmin":false,"groupAdmin":true,"groups":[{"name":"newbies","channels":["general","help"]},{"name":"general","channels":["general","chitchat","topic of the day"]},{"name":"Test","channels":["general","Test"]}]},"Bob":{"email":"bob@bobsworld.com","superAdmin":false,"groupAdmin":false,"groups":[{"name":"Test","channels":["general","Test"]}]},"Spencer":{"email":"","superAdmin":false,"groupAdmin":false,"groups":[{"name":"newbies","channels":["general","help"]},{"name":"general","channels":["general","chitchat"]}]},"null":{"email":"","superAdmin":false,"groupAdmin":false,"groups":[{"name":"newbies","channels":["general","help"]},{"name":"general","channels":["general","chitchat"]}]},"Ed":{"email":"","superAdmin":false,"groupAdmin":false,"groups":[{"name":"newbies","channels":["general","help"]},{"name":"general","channels":["general","chitchat"]}]}}
+{
+    "Super": {
+        "email": "super@admin.com",
+        "superAdmin": true,
+        "groupAdmin": true,
+        "groups": [
+            {
+                "name": "newbies",
+                "channels": [
+                    "general",
+                    "help"
+                ]
+            },
+            {
+                "name": "general",
+                "channels": [
+                    "general",
+                    "chitchat"
+                ]
+            },
+            {
+                "name": "Test",
+                "channels": [
+                    "general",
+                    "Test"
+                ]
+            }
+        ]
+    },
+    "Edmond": {
+        "email": "edmond.chuc@outlook.com",
+        "superAdmin": false,
+        "groupAdmin": true,
+        "groups": [
+            {
+                "name": "newbies",
+                "channels": [
+                    "general",
+                    "help"
+                ]
+            },
+            {
+                "name": "general",
+                "channels": [
+                    "general",
+                    "chitchat",
+                    "topic of the day"
+                ]
+            },
+            {
+                "name": "Test",
+                "channels": [
+                    "general",
+                    "Test"
+                ]
+            }
+        ]
+    },
+    "Bob": {
+        "email": "bob@bobsworld.com",
+        "superAdmin": false,
+        "groupAdmin": false,
+        "groups": [
+            {
+                "name": "newbies",
+                "channels": [
+                    "general",
+                    "help"
+                ]
+            },
+            {
+                "name": "Test",
+                "channels": [
+                    "general",
+                    "Test"
+                ]
+            },
+            {
+                "name": "general",
+                "channels": [
+                    "general",
+                    "chitchat"
+                ]
+            }
+        ]
+    },
+    "Spencer": {
+        "email": "",
+        "superAdmin": false,
+        "groupAdmin": false,
+        "groups": [
+            {
+                "name": "newbies",
+                "channels": [
+                    "general",
+                    "help"
+                ]
+            },
+            {
+                "name": "general",
+                "channels": [
+                    "general",
+                    "chitchat"
+                ]
+            }
+        ]
+    },
+    "null": {
+        "email": "",
+        "superAdmin": false,
+        "groupAdmin": false,
+        "groups": [
+            {
+                "name": "newbies",
+                "channels": [
+                    "general",
+                    "help"
+                ]
+            },
+            {
+                "name": "general",
+                "channels": [
+                    "general",
+                    "chitchat"
+                ]
+            }
+        ]
+    },
+    "Ed": {
+        "email": "",
+        "superAdmin": false,
+        "groupAdmin": false,
+        "groups": [
+            {
+                "name": "newbies",
+                "channels": [
+                    "general",
+                    "help"
+                ]
+            },
+            {
+                "name": "general",
+                "channels": [
+                    "general",
+                    "chitchat"
+                ]
+            }
+        ]
+    }
+}

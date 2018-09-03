@@ -21,12 +21,12 @@
 <h2 class="title">Channels:</h2>
 <ul *ngIf="channels && (!isSuperAdmin && !isGroupAdmin)">
     <li *ngFor="let channel of channels">
-        Group: {{channel}} <button (click)="viewChannel(channel)">View channel</button>
+        Channel: {{channel}} <button (click)="viewChannel(channel)">View channel</button>
     </li>
 </ul>
 <ul *ngIf="allChannels && (isSuperAdmin || isGroupAdmin)">
     <li *ngFor="let channel of allChannels">
-        Group: {{channel}} <button (click)="viewChannel(channel)">View channel</button> <button (click)="removeChannel(channel)">Remove channel</button>
+        Channel: {{channel}} <button (click)="viewChannel(channel)">View channel</button> <button (click)="removeChannel(channel)">Remove channel</button>
     </li>
 </ul>
 

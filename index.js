@@ -382,14 +382,46 @@ app.delete('/api/remove/:groupName.:username', (req, res) => {
     console.log('DELETE request at /api/:groupName/:username/remove');
     let username = req.params.username;
     let groupName = req.params.groupName;
+    console.log(username, groupName);
     retrieveUsers((users) => {
         for(group of users[username].groups) {
             if(group.name === groupName) {
-                users[username].groups.splice(group, 1);
+                users[username].groups.splice(users[username].groups.indexOf(group), 1);
+                // console.log(users[username].groups.indexOf(group));
             }
         }
         writeUsers(users, () => { // get the new list of names in the group
             getAllUsersInGroup(groupName, res);
         })
+    });
+});
+
+app.post('/api/groups/add', (req, res) => {
+    console.log('POST request at /api/groups/add');
+    const username = req.body.username;
+    const groupName = req.body.groupName;
+    retrieveUsers((users) => {
+        if(users[username] === undefined) {
+            let user = userDataTemplate;
+            user.groups.push(
+                {
+                    "name": groupName,
+                    "channels": ["general"]
+                }
+            );
+            addUser(username, user);
+        }
+        else {
+            users[username].groups.push(
+                {
+                    "name": groupName,
+                    "channels": ["general"]
+                }
+            );
+        }
+        writeUsers(users, () => {
+            console.log(users);
+            getAllUsersInGroup(groupName, res);
+        });
     });
 });
