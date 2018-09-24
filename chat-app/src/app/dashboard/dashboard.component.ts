@@ -45,6 +45,7 @@ export class DashboardComponent implements OnInit {
     this.usersService.getUser(this.username).subscribe(
       data => {
         this.userData = data;
+        
       },
       err => {
         console.error

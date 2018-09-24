@@ -1,1 +1,173 @@
-{"Super":{"email":"super@admin.com","superAdmin":true,"groupAdmin":true,"groups":[{"name":"newbies","channels":["general","help"]},{"name":"general","channels":["general","chitchat","topic of the day"]},{"name":"Test","channels":["general","Test2"]}]},"Edmond":{"email":"edmond.chuc@outlook.com","superAdmin":false,"groupAdmin":true,"groups":[{"name":"newbies","channels":["general","help"]},{"name":"general","channels":["general","chitchat","topic of the day"]},{"name":"Test","channels":["general","Test2"]}]},"Bob":{"email":"bob@bobsworld.com","superAdmin":false,"groupAdmin":false,"groups":[{"name":"newbies","channels":["general","help"]},{"name":"general","channels":["general","chitchat","topic of the day"]},{"name":"Test","channels":["general"]}]},"Spencer":{"email":"spencer@work.com","superAdmin":false,"groupAdmin":false,"groups":[{"name":"newbies","channels":["general","help"]},{"name":"general","channels":["general","chitchat","topic of the day"]},{"name":"Test","channels":["general","Test2"]}]},"Sa":{"email":"asdfasdf","superAdmin":false,"groupAdmin":false,"groups":[{"name":"newbies","channels":["general","help"]},{"name":"general","channels":["general","chitchat","topic of the day"]}]}}
+{
+    "Super": {
+        "email": "super@admin.com",
+        "superAdmin": true,
+        "groupAdmin": true,
+        "groups": [
+            {
+                "name": "newbies",
+                "channels": [
+                    "general",
+                    "help"
+                ]
+            },
+            {
+                "name": "general",
+                "channels": [
+                    "general",
+                    "chitchat",
+                    "topic of the day"
+                ]
+            },
+            {
+                "name": "Test",
+                "channels": [
+                    "general",
+                    "Test2"
+                ]
+            },
+            {
+                "name": "Test2",
+                "channels": [
+                    "general"
+                ]
+            }
+        ]
+    },
+    "Edmond": {
+        "email": "edmond.chuc@outlook.com",
+        "superAdmin": false,
+        "groupAdmin": true,
+        "groups": [
+            {
+                "name": "newbies",
+                "channels": [
+                    "general",
+                    "help"
+                ]
+            },
+            {
+                "name": "general",
+                "channels": [
+                    "general",
+                    "chitchat",
+                    "topic of the day"
+                ]
+            },
+            {
+                "name": "Test",
+                "channels": [
+                    "general",
+                    "Test2"
+                ]
+            },
+            {
+                "name": "Test2",
+                "channels": [
+                    "general"
+                ]
+            }
+        ]
+    },
+    "Bob": {
+        "email": "bob@bobsworld.com",
+        "superAdmin": false,
+        "groupAdmin": false,
+        "groups": [
+            {
+                "name": "newbies",
+                "channels": [
+                    "general",
+                    "help"
+                ]
+            },
+            {
+                "name": "general",
+                "channels": [
+                    "general",
+                    "chitchat",
+                    "topic of the day"
+                ]
+            },
+            {
+                "name": "Test",
+                "channels": [
+                    "general"
+                ]
+            }
+        ]
+    },
+    "Spencer": {
+        "email": "spencer@work.com",
+        "superAdmin": false,
+        "groupAdmin": false,
+        "groups": [
+            {
+                "name": "newbies",
+                "channels": [
+                    "general",
+                    "help"
+                ]
+            },
+            {
+                "name": "general",
+                "channels": [
+                    "general",
+                    "chitchat",
+                    "topic of the day"
+                ]
+            },
+            {
+                "name": "Test",
+                "channels": [
+                    "general",
+                    "Test2"
+                ]
+            }
+        ]
+    },
+    "Sa": {
+        "email": "asdfasdf",
+        "superAdmin": false,
+        "groupAdmin": false,
+        "groups": [
+            {
+                "name": "newbies",
+                "channels": [
+                    "general",
+                    "help"
+                ]
+            },
+            {
+                "name": "general",
+                "channels": [
+                    "general",
+                    "chitchat",
+                    "topic of the day"
+                ]
+            }
+        ]
+    },
+    "Dylan": {
+        "email": "",
+        "superAdmin": false,
+        "groupAdmin": false,
+        "groups": [
+            {
+                "name": "newbies",
+                "channels": [
+                    "general",
+                    "help"
+                ]
+            },
+            {
+                "name": "general",
+                "channels": [
+                    "general",
+                    "chitchat",
+                    "topic of the day"
+                ]
+            }
+        ]
+    }
+}

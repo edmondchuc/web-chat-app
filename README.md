@@ -250,7 +250,15 @@ The Login component allows a user to log in. Any user can type any username and 
 (window as any).global = window;
 ```
 
+### JSON Body-Parser
+```javascript
+const bodyParser = require('body-parser')
+app.use(bodyParser.json())
+```
+
 ## Contact
 Author: Edmond Chuc  
 Website: www.edmondchuc.com  
+Repository: https://github.com/edmondchuc/web-chat-app
+
 
