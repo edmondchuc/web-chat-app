@@ -164,7 +164,7 @@ app.get('/api/groups', (req, res) => {
     getGroups(res);
 });
 
-// Update email of client
+// Update email of client - DONE
 app.post('/api/email', (req, res) => {
     console.log('POST request at /api/email');
     const username = req.body.username;

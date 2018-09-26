@@ -96,14 +96,19 @@ app.post('/api/email', (req, res) => {
     console.log('POST request at /api/email');
     const username = req.body.username;
     const email = req.body.email;
-    retrieveUsers((users) => {
-        users[username].email = email;
-        writeUsers(users);
+    
+    // mongo updateOne user by username and update its email 
+    const collection = db.collection(collectionName);
+    collection.updateOne({"username": username}, {$set: {"email": email}}, (err, result) => {
+        assert.strictEqual(err, null);
+        res.send({"success": true});
     });
-    res.send(req.body);
 });
 
+// admin creates a group
 
+
+// admin removes a group
 
 
 
