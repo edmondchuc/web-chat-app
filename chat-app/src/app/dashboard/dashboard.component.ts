@@ -118,7 +118,7 @@ export class DashboardComponent implements OnInit {
     this.usersService.createGroup(this.username, this.createGroupName)
     .subscribe(
       (data) => {
-        console.log(data);
+        console.log(JSON.stringify(data)); //TODO: It is printing array of Objects and not the actual data.
         console.log('POST call successful. Sent ' + data);
         this.allGroups = data;
         console.log(this.allGroups);

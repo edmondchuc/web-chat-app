@@ -106,7 +106,46 @@ app.post('/api/email', (req, res) => {
 });
 
 // admin creates a group
+app.post('/api/createGroup', (req, res) => {
+    console.log('POST request at /api/createGroup');
+    let username = req.body.username;
+    let groupName = req.body.groupName;
+    console.log(`\tCreating new group ${groupName} for user ${username}`);
 
+    // retrieve the user's info
+    const collection = db.collection(collectionName);
+    collection.find({"username": username}).toArray( (err, result) => {
+        assert.strictEqual(err, null);
+        let groups = result[0].groups;
+
+        // check if the group exists, if not, add it
+        let exists = false;
+        for(let i = 0; i < groups.length; i++) {
+            if(groups[i].name === groupName) {
+               exists = true; 
+            }
+        }
+        if(!exists) {
+            groups.push({
+                "name": groupName,
+                "channels": ["general"]
+            })
+        }
+
+        // update the user's groups list
+        collection.updateOne({"username": username}, {$set: {"groups": groups}}, (err, result) => {
+            assert.strictEqual(err, null);
+            
+            // wait for a little time and then fetch the document
+            setTimeout( () => {
+                collection.find({"username": username}).toArray( (err, result) => {
+                    assert.strictEqual(err, null);
+                    res.send(result[0].groups);
+                })
+            }, 200);
+        });
+    });
+});
 
 // admin removes a group
 

@@ -1,6 +1,10 @@
 # Web Chat App
 This repository contains a real-time web chat application implemented using Node.js, Express, Socket.IO, RxJS and Angular.  
 
+## TODO
+* Validate user's login via username and password
+* Super admin can create users in their dashboard
+
 ## Status
 This application currently holds the following functionality:  
 ### Group Admin
