@@ -536,7 +536,7 @@ app.delete('/api/removeUserFromChannel/:groupName.:channelName.:username', (req,
     });
 });
 
-// remove user form the system
+// remove user from the system
 app.delete('/api/removeUserFromSystem/:username', (req, res) => {
     console.log('DELETE request at /api/removeUserFromSystem/:username');
     const username = req.params.username;

@@ -34,29 +34,31 @@ MongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
 /**
  * The user data default template
  */
-const userDataTemplate = {
-    "username": "",
-    "email": "",
-    "superAdmin": false,
-    "groupAdmin": false,
-    "groups": [
-        {
-            "name": "newbies",
-            "channels": [
-                "general", 
-                "help"
-            ]
-        },
-        {
-            "name": "general",
-            "channels": [
-                "general", 
-                "chitchat", 
-                "topic of the day"
-            ]
-        }
-    ]
-}
+class UserDataTemplate {
+    constructor() {
+        this.username = "";
+        this.email = "";
+        this.superAdmin = false;
+        this.groupAdmin = false;
+        this.groups = [
+            {
+                "name": "newbies",
+                "channels": [
+                    "general", 
+                    "help"
+                ]
+            },
+            {
+                "name": "general",
+                "channels": [
+                    "general", 
+                    "chitchat", 
+                    "topic of the day"
+                ]
+            }
+        ]
+    }
+};
 
 // retrieve all the users in the database
 function retrieveUsers(callback) {
@@ -84,14 +86,25 @@ function retrieveUserData(username, callback) {
 
 // Add a new user to the system.
 function addUser(userData) {
+    console.log(userData);
     const collection = db.collection(collectionName);
-    collection.insertOne(userData, (err, result) => {
+    collection.find().toArray( (err, result) => {
         assert.strictEqual(err, null);
+        let exists = false;
+        for(user of result) {
+            if(user.username === userData.username) exists = true;
+        }
+        if(!exists) {
+            collection.insertOne(userData, (err, result) => {
+                assert.strictEqual(err, null);
+            });
+        }
     });
 }
 
 // Return user data back to client
 app.get('/api/user', (req, res) => {
+    
     const username = req.query.username;
     console.log('GET request at /api/user');
     console.log(`\tFetching user data for: ${username}`);
@@ -103,7 +116,7 @@ app.get('/api/user', (req, res) => {
         else {
             console.log(`\tUser ${username} was not found.`);
             console.log(`\tCreating user ${username} and saving to file`);
-            userData = userDataTemplate;
+            userData = new userDataTemplate();
             userData.username = username;
             addUser(userData)
             console.log(`\tResponding with data on user: ${username}`);
@@ -313,25 +326,27 @@ app.post('/api/channel/create', (req, res) => {
             }
         }
         writeUsers(users, () => { // write to disk
-            retrieveUsers((users) => { // send back a list of all channels for the group
-                for(let user in users) {
-                    if(users.hasOwnProperty(user)) {
-                        users[user].groups.forEach(group => {
-                            if(group.name === groupName) {  // found the group
-                                // if channel is not in channel list, add it
-                                for(channel of group.channels) {
-                                    if(!channels.includes(channel)) {
-                                        channels.push(channel);
+            setTimeout( () => {
+                retrieveUsers((users) => { // send back a list of all channels for the group
+                    for(let user in users) {
+                        if(users.hasOwnProperty(user)) {
+                            users[user].groups.forEach(group => {
+                                if(group.name === groupName) {  // found the group
+                                    // if channel is not in channel list, add it
+                                    for(channel of group.channels) {
+                                        if(!channels.includes(channel)) {
+                                            channels.push(channel);
+                                        }
                                     }
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
-                }
-                console.log(`\tFinished collating channels for group ${groupName}`);
-                console.log(channels);
-                res.send(channels);
-            });
+                    console.log(`\tFinished collating channels for group ${groupName}`);
+                    console.log(channels);
+                    res.send(channels);
+                });
+            }, 100);
         });
     });
 });
@@ -438,7 +453,7 @@ app.post('/api/groups/add', (req, res) => {
             }
         }
         if(!exists) {
-            let user = userDataTemplate;
+            let user = new UserDataTemplate();
             user.username = username;
             user.groups.push(
                 { "name": groupName, "channels": ["general"] }
@@ -470,17 +485,20 @@ app.post('/api/groups/add', (req, res) => {
         writeUsers(users, () => {
             console.log(users);
             // getAllUsersInGroup(groupName, res);
-            retrieveUsers((users) => {
-                res.send(users);
-            })
+            setTimeout(() => {
+                retrieveUsers((users) => {
+                    res.send(users);
+                })
+            }, 100);
+            
         });
     });
 });
 
-// add new user to a channel in a group
+// add new user to a channel in a group TODO: duplicate key issue when creating new user
 app.post('/api/group/channel/add', (req, res) => {
     console.log('POST request at /api/group/channel/add');
-    console.log(req.body);
+    // console.log(req.body);
     const username = req.body.username;
     const groupName = req.body.groupName;
     const channelName = req.body.channelName;
@@ -493,14 +511,17 @@ app.post('/api/group/channel/add', (req, res) => {
             }
         }
         if(!exists) {
-            let user = userDataTemplate;
+            console.log('Creating user');
+            let user = new UserDataTemplate();
             user.username = username;
             user.groups.push(
                 {
                     "name": groupName,
                     "channels": ["general", channelName]
                 }
-            )
+            );
+            console.log(user);
+            users.push(user);
             addUser(user);
         }
         else { // if they do exist
@@ -528,16 +549,36 @@ app.post('/api/group/channel/add', (req, res) => {
                     }
                 }
             }
+            console.log('WERITING USERS TSO SLETSI');
+            writeUsers(users, () => {
+                // console.log(users);
+                // retrieveUsers((users) => {
+                //     res.send(users);
+                // })
+            });
         }
-        writeUsers(users, () => {
-            // console.log(users);
-            retrieveUsers((users) => {
-                res.send(users);
-            })
-        });
+        setTimeout(()=> {
+            res.send(users)
+        },100);
     });
 });
 
+// remove user from the system
+app.delete('/api/removeUserFromSystem/:username', (req, res) => {
+    console.log('DELETE request at /api/removeUserFromSystem/:username');
+    const username = req.params.username;
+    retrieveUsers((users) => {
+        const collection = db.collection(collectionName);
+        collection.deleteOne({"username": username}, (err, result) => {
+            assert.strictEqual(err, null);
+            retrieveUsers( (data) => {
+                res.send(data);
+            });
+        });
+        // users[username] = undefined;
+        
+    });
+});
 
 // create the super user
 // not actively used, purpose is for use on fresh MongoDB installation
@@ -545,9 +586,9 @@ function createSuperUser() {
     const collection = db.collection(collectionName);
     collection.insertOne(
         {
-            "username": "Super",
-            "email": "super@admin.com",
-            "superAdmin": true,
+            "username": "Edmond",
+            "email": "edmond@admin.com",
+            "superAdmin": false,
             "groupAdmin": true,
             "groups": [
                 {
