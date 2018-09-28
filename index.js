@@ -477,6 +477,67 @@ app.post('/api/groups/add', (req, res) => {
     });
 });
 
+// add new user to a channel in a group
+app.post('/api/group/channel/add', (req, res) => {
+    console.log('POST request at /api/group/channel/add');
+    console.log(req.body);
+    const username = req.body.username;
+    const groupName = req.body.groupName;
+    const channelName = req.body.channelName;
+    retrieveUsers((users) => {
+        let exists = false;
+        for(let user of users) {
+            if(user.username === username) {
+                exists = true;
+                break;
+            }
+        }
+        if(!exists) {
+            let user = userDataTemplate;
+            user.username = username;
+            user.groups.push(
+                {
+                    "name": groupName,
+                    "channels": ["general", channelName]
+                }
+            )
+            addUser(user);
+        }
+        else { // if they do exist
+            exists = false; // now use it to check if group exists
+            for(let user of users) {
+                if(user.username === username) {
+                    for(let group of user.groups) {
+                        if(group.name === groupName) {
+                            exists = true;
+                            group.channels.push(channelName);
+                            break;
+                        }
+                    }
+                }
+            }
+            if(!exists) {
+                for(let user of users) {
+                    if(user.username === username) {
+                        user.groups.push(
+                            {
+                                "name": groupName,
+                                "channels": ["general", channelName]
+                            }
+                        );
+                    }
+                }
+            }
+        }
+        writeUsers(users, () => {
+            // console.log(users);
+            retrieveUsers((users) => {
+                res.send(users);
+            })
+        });
+    });
+});
+
 
 // create the super user
 // not actively used, purpose is for use on fresh MongoDB installation

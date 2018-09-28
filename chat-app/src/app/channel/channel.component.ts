@@ -62,16 +62,23 @@ export class ChannelComponent implements OnInit {
   // update the list of users in this channel
   updateAllUsersList() {
     this.listOfUsers = [];
-    for(let user in this.allUsers) {
-      if(this.allUsers.hasOwnProperty(user)) {
-        for(let group of this.allUsers[user].groups) {
-          if(group.name === this.groupName) {
-            if(group.channels.includes(this.channelName)) {
-              this.listOfUsers.push(user);
-            }
+    for(let user of this.allUsers) {
+      for(let group of user.groups) {
+        if(group.name === this.groupName) {
+          if(group.channels.includes(this.channelName)) {
+            this.listOfUsers.push(user.username);
           }
         }
       }
+      // if(this.allUsers.hasOwnProperty(user)) {
+      //   for(let group of this.allUsers[user].groups) {
+      //     if(group.name === this.groupName) {
+      //       if(group.channels.includes(this.channelName)) {
+      //         this.listOfUsers.push(user);
+      //       }
+      //     }
+      //   }
+      // }
     }
   }
 

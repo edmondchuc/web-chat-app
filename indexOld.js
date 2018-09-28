@@ -411,7 +411,7 @@ app.get('/api/users/all', (req, res) => {
     });
 });
 
-// remove user from a group
+// remove user from a group - DONE
 app.delete('/api/remove/:groupName.:username', (req, res) => {
     console.log('DELETE request at /api/:groupName/:username/remove');
     let username = req.params.username;
