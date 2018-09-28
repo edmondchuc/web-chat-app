@@ -430,7 +430,7 @@ app.delete('/api/remove/:groupName.:username', (req, res) => {
     });
 });
 
-// add user to a group
+// add user to a group - DONE
 app.post('/api/groups/add', (req, res) => {
     console.log('POST request at /api/groups/add');
     const username = req.body.username;

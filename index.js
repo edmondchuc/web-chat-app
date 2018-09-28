@@ -386,6 +386,97 @@ app.get('/api/users/all', (req, res) => {
     });
 });
 
+// remove user from a group
+app.delete('/api/remove/:groupName.:username', (req, res) => {
+    console.log('DELETE request at /api/:groupName/:username/remove');
+    let username = req.params.username;
+    let groupName = req.params.groupName;
+    console.log(username, groupName);
+    retrieveUsers((users) => {
+        // for(group of users[username].groups) {
+        //     if(group.name === groupName) {
+        //         users[username].groups.splice(users[username].groups.indexOf(group), 1);
+        //         // console.log(users[username].groups.indexOf(group));
+        //     }
+        // }
+        for(let i = 0; i < users.length; i++) {
+            for(let j = 0; j < users[i].groups.length; j++) {
+                if(users[i].username === username) {
+                    if(users[i].groups[j].name === groupName) {
+                        users[i].groups.splice(users[i].groups.indexOf(users[i].groups[j]), 1);
+                    }
+                }
+            }
+        }
+        writeUsers(users, () => { // get the new list of names in the group
+            getAllUsersInGroup(groupName, res);
+        })
+    });
+});
+
+// add user to a group
+app.post('/api/groups/add', (req, res) => {
+    console.log('POST request at /api/groups/add');
+    const username = req.body.username;
+    const groupName = req.body.groupName;
+    retrieveUsers((users) => {
+        // check if the user exists
+        let exists = false;
+        for(let i = 0; i < users.length; i++) {
+            if(users[i].username === username) {
+                users[i].groups.forEach(group => {
+                    if(group.name === groupName) {
+                        exists = true;
+                    }
+                });
+                if(!exists) {
+                    users[i].groups.push(
+                        { "name": groupName, "channels": ["general"] }
+                    );
+                    exists = true;
+                }
+            }
+        }
+        if(!exists) {
+            let user = userDataTemplate;
+            user.username = username;
+            user.groups.push(
+                { "name": groupName, "channels": ["general"] }
+            );
+            addUser(user);
+        }
+
+        // if(users[username] === undefined) {
+        //     let user = userDataTemplate;
+        //     user.groups.push(
+        //         {
+        //             "name": groupName,
+        //             "channels": ["general"]
+        //         }
+        //     );
+        //     // addUser(username, user);
+        //     users[username] = user;
+        //     console.log('Adding new user');
+        // }
+        // else {
+        //     users[username].groups.push(
+        //         {
+        //             "name": groupName,
+        //             "channels": ["general"]
+        //         }
+        //     );
+        //     console.log('Adding existing user to group');
+        // }
+        writeUsers(users, () => {
+            console.log(users);
+            // getAllUsersInGroup(groupName, res);
+            retrieveUsers((users) => {
+                res.send(users);
+            })
+        });
+    });
+});
+
 
 // create the super user
 // not actively used, purpose is for use on fresh MongoDB installation

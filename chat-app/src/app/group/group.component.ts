@@ -191,10 +191,19 @@ export class GroupComponent implements OnInit {
       return;
     }
     // check if they are an admin, if not, then proceed
-    if(this.allUserData[user].groupAdmin) {
-      alert(`Cannot remove admin user ${user}`);
-      return;
+    for(let i = 0; i < this.allUserData.length; i++) {
+      if(this.allUserData[i].username === user) {
+        if(this.allUserData[i].groupAdmin === true) {
+          alert(`Cannot remove admin user ${user}`);
+          console.log(this.allUserData[i]);
+          return;
+        }
+      }
     }
+    // if(this.allUserData[user].groupAdmin) {
+    //   alert(`Cannot remove admin user ${user}`);
+    //   return;
+    // }
     console.log(`Removing user ${user}`);
     this.usersService.removeUserInGroup(user, this.groupName).subscribe(
       data => {
@@ -213,16 +222,27 @@ export class GroupComponent implements OnInit {
 
   updateAllUsersList() {
     this.allUsers = [];
-    for(let user in this.allUserData) {
-      if(this.allUserData.hasOwnProperty(user)) {
-        for(let group of this.allUserData[user].groups) {
-          console.log(group);
-          if(group.name === this.groupName) {
-            this.allUsers.push(user);
-          }
+    for(let i = 0; i < this.allUserData.length; i++) {
+      // console.log(this.allUserData[i].username);
+      for(let j = 0; j < this.allUserData[i].groups.length; j++) {
+        // console.log(this.allUserData[i].groups[j].name);
+        if(this.allUserData[i].groups[j].name === this.groupName) {
+          this.allUsers.push(this.allUserData[i].username);
         }
       }
     }
+    console.log(this.allUserData);
+
+    // for(let user in this.allUserData) {
+    //   if(this.allUserData.hasOwnProperty(user)) {
+    //     for(let group of this.allUserData[user].groups) {
+    //       console.log(group);
+    //       if(group.name === this.groupName) {
+    //         this.allUsers.push(user);
+    //       }
+    //     }
+    //   }
+    // }
   }
 
   addUserToGroup() {
@@ -242,7 +262,7 @@ export class GroupComponent implements OnInit {
     this.usersService.addUserToGroup(this.newUsername, this.groupName).subscribe(
       data => {
         console.log('Received data from adding user to group');
-        // console.log(data);
+        console.log(data);
         this.allUserData = data;
         this.updateAllUsersList();
       },
