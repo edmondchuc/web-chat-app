@@ -173,8 +173,11 @@ export class DashboardComponent implements OnInit {
 
   updateAllUsersList() {
     this.listOfUsers = [];
-    for(let user in this.allUsers) {
-      this.listOfUsers.push(user);
+    // for(let user in this.allUsers) {
+    //   this.listOfUsers.push(user);
+    // }
+    for(let i = 0; i < this.allUsers.length; i++) {
+      this.listOfUsers.push(this.allUsers[i].username);
     }
   }
 
@@ -183,7 +186,7 @@ export class DashboardComponent implements OnInit {
       this.usersService.getDataAllUsers().subscribe(
         data => {
           console.log('Received all user data from server');
-          // console.log(data);
+          console.log(data);
           this.allUsers = data;
           this.updateAllUsersList();
         },

@@ -42,56 +42,84 @@ const userDataTemplate = {
     "groups": [
         {
             "name": "newbies",
-            "channels": ["general", "help"]
+            "channels": [
+                "general", 
+                "help"
+            ]
         },
         {
             "name": "general",
-            "channels": ["general", "chitchat", "topic of the day"]
+            "channels": [
+                "general", 
+                "chitchat", 
+                "topic of the day"
+            ]
         }
     ]
 }
 
+// retrieve all the users in the database
+function retrieveUsers(callback) {
+    let users;
+
+    const collection = db.collection(collectionName);
+    collection.find().toArray( (err, result) => {
+        assert.strictEqual(err, null);
+        callback(result);
+    });
+}
+
+// retrieve the user data for a specific user
+function retrieveUserData(username, callback) {
+    let userData;
+    retrieveUsers( (users) => {
+        for(let i = 0; i < users.length; i++) {
+            if(users[i].username === username) {
+                userData = users[i];
+            }
+        }
+        callback(userData);
+    });
+}
+
+// Add a new user to the system.
+function addUser(userData) {
+    const collection = db.collection(collectionName);
+    collection.insertOne(userData, (err, result) => {
+        assert.strictEqual(err, null);
+    });
+}
 
 // Return user data back to client
 app.get('/api/user', (req, res) => {
     const username = req.query.username;
     console.log('GET request at /api/user');
     console.log(`\tFetching user data for: ${username}`);
-    
-    const collection = db.collection(collectionName);
-    collection.findOne({"username": username}, (err, result) => {
-        assert.strictEqual(null, err);
-        // console.log(result.groups);
-        // console.log(`email? ${result['email']}`);
-        res.send(result);
-    });
+    retrieveUserData(username, (userData => {
+        if(userData) {
+            console.log(`\tResponding with data on user: ${username}`);
+            res.send(userData);
+        }
+        else {
+            console.log(`\tUser ${username} was not found.`);
+            console.log(`\tCreating user ${username} and saving to file`);
+            userData = userDataTemplate;
+            userData.username = username;
+            addUser(userData)
+            console.log(`\tResponding with data on user: ${username}`);
+            res.send(userData);
+        }
+    }));
 });
 
-// return an array of group names as strings
+// // return an array of group names as strings for admin users
 app.get('/api/groups', (req, res) => {
     console.log('GET request at /api/groups');
 
-    const collection = db.collection(collectionName);
-    collection.find().toArray( (err, result) => {
-        assert.strictEqual(null, err);
-        
-        let groups = [] // the array of groups to return
-
-        // loop through each user and add the unique group name to the groups array
-        result.forEach( user => {
-            user.groups.forEach( group => {
-                if(!groups.includes(group.name)) {
-                    console.log(group.name);
-                    groups.push(group.name);
-                }
-            });
-        })
-
-        res.send(groups);
-    });
+    getGroups(res);
 });
 
-// Update email of client
+// // Update email of client
 app.post('/api/email', (req, res) => {
     console.log('POST request at /api/email');
     const username = req.body.username;
@@ -105,7 +133,7 @@ app.post('/api/email', (req, res) => {
     });
 });
 
-// admin creates a group
+// // admin creates a group
 app.post('/api/createGroup', (req, res) => {
     console.log('POST request at /api/createGroup');
     let username = req.body.username;
@@ -140,7 +168,7 @@ app.post('/api/createGroup', (req, res) => {
             setTimeout( () => {
                 collection.find({"username": username}).toArray( (err, result) => {
                     assert.strictEqual(err, null);
-                    res.send(result[0].groups);
+                    getGroups(res);
                 })
             }, 200);
         });
@@ -148,8 +176,215 @@ app.post('/api/createGroup', (req, res) => {
 });
 
 // admin removes a group
+app.delete('/api/removeGroup/:groupName', (req, res) => {
+    console.log('DELETE request at /api/removeGroup');
+    const groupName = req.params.groupName;
 
+    retrieveUsers( (users) => {
+        for(let i = 0; i < users.length; i++) {
+            // console.log(users[i].username);
+            users[i].groups.forEach( (group)=> {
+                // console.log(group.name);
+                if(group.name === groupName) {
+                    users[i].groups.splice(users[i].groups.indexOf(groupName), 1);
+                }
+            })
+        }
+        // write to file the new changes
+        writeUsers(users, () => {
+            let groups = []
+            for(let i = 0; i < users.length; i++) {
+                users[i].groups.forEach( group => {
+                    if(!groups.includes(group.name)) {
+                        groups.push(group.name);
+                    }
+                });
+            }
+            res.send(groups);
+        });
+    });
+});
 
+// get all the groups for admins
+function getGroups(res) {
+    retrieveUsers( (users) => {
+        let groups = [];
+        for(let i = 0; i < users.length; i++) {
+            let userGroup = users[i].groups;
+            for(let j = 0; j < userGroup.length; j++) {
+                if(!groups.includes(userGroup[j].name)) {
+                    groups.push(userGroup[j].name);
+                }
+            }
+        }
+        res.send(groups);
+    });
+}
+
+// get all channels in a group
+app.get('/api/:group/channels', (req, res) => {
+    console.log('GET request at /api/:group/channels');
+    const groupName = req.params.group;
+    console.log(`\tCollating all channels for group ${groupName}`);
+    let channels = [];
+    retrieveUsers((users) => {
+        for(let user in users) {
+            if(users.hasOwnProperty(user)) {
+                users[user].groups.forEach(group => {
+                    if(group.name === groupName) {  // found the group
+                        // if channel is not in channel list, add it
+                        for(channel of group.channels) {
+                            if(!channels.includes(channel)) {
+                                channels.push(channel);
+                            }
+                        }
+                    }
+                });
+            }
+        }
+        console.log(`\tFinished collating channels for group ${groupName}`);
+        console.log(channels);
+        res.send(channels);
+    });
+});
+
+// get all the users in a group
+app.get('/api/:groupName/users', (req, res) => {
+    console.log('GET request at /api/:groupName/users');
+    const groupName = req.params.groupName;
+    console.log(`\tReceived groupName: ${groupName}`);
+    getAllUsersInGroup(groupName, res);
+});
+
+// get all the users in the group
+function getAllUsersInGroup(groupName, res) {
+    let allUsers = [];
+    retrieveUsers((users) => {
+        for(let i = 0; i < users.length; i++) {
+            users[i].groups.forEach( (group) => {
+                if(group.name === groupName) {
+                    if(!allUsers.includes(users[i].username)) {
+                        allUsers.push(users[i].username);
+                    }
+                }
+            })
+        }
+        console.log(`\tResponding back with all users ${allUsers}`);
+        res.send(allUsers);
+    });
+}
+
+// write to the database updating all the users
+function writeUsers(users, callback) {
+    const collection = db.collection(collectionName);
+    
+    for(let i = 0; i < users.length; i++) {
+        collection.updateOne({"username": users[i].username}, {$set: users[i]}, (err, result) => {
+            assert.strictEqual(err, null);
+        });
+    }
+    callback();
+}
+
+// create new channel in a group
+app.post('/api/channel/create', (req, res) => {
+    console.log(`POST request at /api/channel/create`);
+    console.log(req.body);
+    const username = req.body.username;
+    const groupName = req.body.groupName;
+    const channelName = req.body.channelName;
+    let channels = [];
+
+    console.log('\tLoading data...');
+    retrieveUsers((users) => {
+        console.log(`\tAdding channel ${channelName} to group ${groupName}`);
+        for(user in users) {
+            if(users.hasOwnProperty(user)) {
+                if(users[user].groupAdmin) {
+                    for(group of users[user].groups) {
+                        // console.log(group.name);
+                        if(group.name == groupName) {
+                            if(!group.channels.includes(channelName)) {
+                                group.channels.push(channelName);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        writeUsers(users, () => { // write to disk
+            retrieveUsers((users) => { // send back a list of all channels for the group
+                for(let user in users) {
+                    if(users.hasOwnProperty(user)) {
+                        users[user].groups.forEach(group => {
+                            if(group.name === groupName) {  // found the group
+                                // if channel is not in channel list, add it
+                                for(channel of group.channels) {
+                                    if(!channels.includes(channel)) {
+                                        channels.push(channel);
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+                console.log(`\tFinished collating channels for group ${groupName}`);
+                console.log(channels);
+                res.send(channels);
+            });
+        });
+    });
+});
+
+// remove channel of a group
+app.delete('/api/channel/remove/:username.:groupName.:channelName', (req, res) => {
+    console.log('DELETE request at /api/channel/remove:groupName.:channelName');
+    console.log(req.params);
+    const username = req.params.username;
+    const groupName = req.params.groupName;
+    const channelName = req.params.channelName;
+    let channels = [];
+
+    retrieveUsers( (users) => {
+        for(let user in users) { // loop over the users object's properties
+            if(users.hasOwnProperty(user)) {
+                for(group of users[user].groups) {
+                    if(group.name === groupName) {
+                        if(group.channels.includes(channelName)) { // remove channel
+                            group.channels.splice(group.channels.indexOf(channelName), 1);
+                        }
+                    }
+                }
+            }
+        }
+        // write to file the new changes
+        writeUsers(users, () => {});
+        for(user in users) {
+            if(users.hasOwnProperty(user)) {
+                for(group of users[user].groups) {
+                    if(group.name === groupName) {
+                        for(channel of group.channels) {
+                            if(!channels.includes(channel)) {
+                                channels.push(channel);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        console.log(`\tResponding with new list of channels ${channels}`);
+        res.send(channels);
+    });
+});
+
+// get all users and their data
+app.get('/api/users/all', (req, res) => {
+    console.log('GET request at /api/users/all');
+    retrieveUsers((users) => {
+        console.log(users);
+        res.send(users);
+    });
+});
 
 
 // create the super user

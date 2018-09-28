@@ -176,7 +176,7 @@ app.post('/api/email', (req, res) => {
     res.send(req.body);
 });
 
-// Remove a group
+// Remove a group - DONE
 app.delete('/api/removeGroup/:groupName', (req, res) => {
     console.log('DELETE request at /api/removeGroup');
     const groupName = req.params.groupName;
@@ -201,7 +201,7 @@ app.delete('/api/removeGroup/:groupName', (req, res) => {
     });
 });
 
-// create a new group
+// create a new group - DONE
 app.post('/api/createGroup', (req, res) => {
     console.log('POST request at /api/createGroup');
     let username = req.body.username;
@@ -257,7 +257,7 @@ app.post('/api/createGroup', (req, res) => {
     });
 });
 
-// create new channel in a group
+// create new channel in a group - DONE
 app.post('/api/channel/create', (req, res) => {
     console.log(`POST request at /api/channel/create`);
     console.log(req.body);
@@ -307,7 +307,7 @@ app.post('/api/channel/create', (req, res) => {
     });
 });
 
-// remove channel of a group
+// remove channel of a group - DONE
 app.delete('/api/channel/remove/:username.:groupName.:channelName', (req, res) => {
     console.log('DELETE request at /api/channel/remove:groupName.:channelName');
     console.log(req.params);
@@ -348,7 +348,7 @@ app.delete('/api/channel/remove/:username.:groupName.:channelName', (req, res) =
     });
 });
 
-// get all channels in a group
+// get all channels in a group - DONE
 app.get('/api/:group/channels', (req, res) => {
     console.log('GET request at /api/:group/channels');
     const groupName = req.params.group;
@@ -375,7 +375,7 @@ app.get('/api/:group/channels', (req, res) => {
     });
 });
 
-// get all the users in the group
+// get all the users in the group - DONE
 function getAllUsersInGroup(groupName, res) {
     let allUsers = [];
     retrieveUsers((users) => {
@@ -395,7 +395,7 @@ function getAllUsersInGroup(groupName, res) {
     });
 }
 
-// get all the users in a group
+// get all the users in a group - DONE
 app.get('/api/:groupName/users', (req, res) => {
     console.log('GET request at /api/:groupName/users');
     const groupName = req.params.groupName;
@@ -403,7 +403,7 @@ app.get('/api/:groupName/users', (req, res) => {
     getAllUsersInGroup(groupName, res);
 });
 
-// get all users and their data
+// get all users and their data - DONE
 app.get('/api/users/all', (req, res) => {
     console.log('GET request at /api/users/all');
     retrieveUsers((users) => {
