@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { UsersService } from '../users.service';
+import { SocketService } from '../socket.service';
 
 @Component({
   selector: 'app-channel',
@@ -25,7 +26,7 @@ export class ChannelComponent implements OnInit {
   messages = ['Start of the conversation...', 'Some sample chat text'];
   message:string = '';
 
-  constructor(private router:Router, private usersService:UsersService) { 
+  constructor(private router:Router, private usersService:UsersService, private socketService:SocketService) { 
     this.channelName = localStorage.getItem('currentChannel');
     this.username = localStorage.getItem('username');
     this.groupName = localStorage.getItem('currentGroup');
@@ -33,6 +34,9 @@ export class ChannelComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.socketService.getMessages().subscribe((message:string) => {
+      this.messages.push(message);
+    });
   }
 
   logOut() {
@@ -172,5 +176,7 @@ export class ChannelComponent implements OnInit {
 
   sendMessage() {
     console.log(`User typed: ${this.message}`);
+    this.socketService.sendMessage(this.username + ' said: ' + this.message);
+    this.message = '';
   }
 }

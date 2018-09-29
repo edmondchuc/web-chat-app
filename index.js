@@ -24,11 +24,24 @@ MongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
     console.log(`Connected successfully to '${database}' database at '${url}' server`);
     db = client.db(database);
 
-    const port = 3000;
-
     // start the server
     app.use(express.static(__dirname + '/chat-app/dist/chat-app'));
-    app.listen(port, () => console.log(`Server listening on port ${port}`));
+    // const port = 3000;
+    // app.listen(port, () => console.log(`Server listening on port ${port}`));
+    const port = process.env.PORT || 3000;
+    server.listen(port, () => {
+        console.log(`Server started on port: ${port}`);
+    });
+});
+
+io.on('connection', (socket) => {
+    console.log('Visitor connected');
+
+    socket.on('new-message', (message) => {
+        console.log('NEW MESSAGE:');
+        console.log('\t' + message);
+        io.emit('message', { type: 'message', text:message });
+    });
 });
 
 /**
@@ -116,11 +129,13 @@ app.get('/api/user', (req, res) => {
         else {
             console.log(`\tUser ${username} was not found.`);
             console.log(`\tCreating user ${username} and saving to file`);
-            userData = new userDataTemplate();
+            userData = new UserDataTemplate();
             userData.username = username;
             addUser(userData)
             console.log(`\tResponding with data on user: ${username}`);
-            res.send(userData);
+            setTimeout(() => {
+                res.send(userData);
+            }, 100);
         }
     }));
 });
