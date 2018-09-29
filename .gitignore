@@ -109,3 +109,9 @@ typings/
 
 
 # End of https://www.gitignore.io/api/node,angular
+
+
+
+
+# Ignore the images directory that is used to upload user profile images and channel chat images
+images/*
