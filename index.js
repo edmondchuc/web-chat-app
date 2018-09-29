@@ -35,13 +35,35 @@ MongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
 });
 
 io.on('connection', (socket) => {
-    console.log('Visitor connected');
+    // console.log('Visitor connected');
+
+    // join room
+    socket.on('join', (content) => {
+        console.log('someone joined');
+        console.log(content);
+        let room = content.groupName + content.channelName;
+        socket.join(room);
+        // socket.broadcast.in(room).emit(content);
+        io.sockets.in(room).emit('message', content);
+    });
+
+    socket.on('leave', (content) => {
+        console.log('Someone left');
+        console.log(content);
+        let room = content.groupName + content.channelName;
+        socket.leave(room);
+        // socket.broadcast.in(room).emit(content);
+        io.sockets.in(room).emit('message', content);
+    });
 
     socket.on('new-message', (content) => {
         console.log('NEW MESSAGE:');
         console.log(content);
-        io.emit('message', content);
+        let room = content.groupName + content.channelName;
+        // io.emit('message', content);
+        io.sockets.in(room).emit('message', content);
     });
+
 });
 
 /**
@@ -411,7 +433,7 @@ app.delete('/api/channel/remove/:username.:groupName.:channelName', (req, res) =
 app.get('/api/users/all', (req, res) => {
     console.log('GET request at /api/users/all');
     retrieveUsers((users) => {
-        console.log(users);
+        // console.log(users);
         res.send(users);
     });
 });

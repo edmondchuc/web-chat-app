@@ -34,6 +34,7 @@ export class ChannelComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.socketService.joinChannel();
     this.socketService.getMessages().subscribe((message) => {
       this.messages.push(message.message);
     });

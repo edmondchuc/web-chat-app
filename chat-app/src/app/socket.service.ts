@@ -12,6 +12,10 @@ export class SocketService {
   private socket;
 
   constructor() { 
+    
+  }
+
+  public joinChannel() {
     this.socket = io(this.url);
     let content = {
       "username": "SYSTEM",
@@ -19,7 +23,17 @@ export class SocketService {
       "channelName": localStorage.getItem("currentChannel"),
       "message": localStorage.getItem("username") + " has joined the chat"
     }
-    this.socket.emit('new-message', content);
+    this.socket.emit('join', content);
+  }
+
+  public leaveChannel() {
+    let content = {
+      "username": "SYSTEM",
+      "groupName": localStorage.getItem("currentGroup"),
+      "channelName": localStorage.getItem("currentChannel"),
+      "message": localStorage.getItem("username") + " has left the chat"
+    }
+    this.socket.emit('leave', content);
   }
 
   public sendMessage(username:string, groupName:string, channelName:string, message:string) {

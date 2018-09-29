@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { UsersService } from '../users.service';
+import { SocketService } from '../socket.service';
 
 @Component({
   selector: 'app-group',
@@ -29,7 +30,7 @@ export class GroupComponent implements OnInit {
 
   newUsername:string = '';
 
-  constructor(private router:Router, private usersService:UsersService) { 
+  constructor(private router:Router, private usersService:UsersService, private socketService:SocketService) { 
     this.groupName = localStorage.getItem('currentGroup');
     this.username = localStorage.getItem('username');
     this.getUser();
@@ -76,6 +77,12 @@ export class GroupComponent implements OnInit {
 
   viewChannel(channel) {
     console.log(`Viewing channel ${channel}`);
+    
+    // leave previous channel
+    if(localStorage.getItem("currentChannel") != null) {
+      this.socketService.leaveChannel();
+    }
+
     localStorage.setItem('currentChannel', channel);
     this.router.navigateByUrl('/channel');
   }
