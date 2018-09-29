@@ -241,6 +241,11 @@ Group admins can also add users to the group and remove users from the group. Ad
 #### Login
 The Login component allows a user to log in. Any user can type any username and log in. User data will persist after they log out. If a username does not exist in the system, the server will seamlessly create the user in the background. 
 
+## MongoDB
+### Collections
+* users - Each document is the data of the users. This includes their username, their admins status, their groups and channels.
+* messages - Each document is a message that was sent in a channel.
+
 ## Miscellaneous 
 ### Modules Used
 * `npm init`
