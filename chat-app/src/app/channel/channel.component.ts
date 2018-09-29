@@ -194,7 +194,7 @@ export class ChannelComponent implements OnInit {
 
   sendMessage() {
     console.log(`User typed: ${this.message}`);
-    this.socketService.sendMessage(this.username, this.groupName, this.channelName, this.message);
+    this.socketService.sendMessage(this.username, this.groupName, this.channelName, this.message, this.userData.profileImage);
     this.message = '';
   }
 }

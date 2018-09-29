@@ -30,9 +30,12 @@
           <div class="notification">
             <div *ngFor="let message of messages">
               <article class="message is-primary">
-                  <div class="message-body">
-                    {{message.username}}: {{message.message}}
+                  <div class="message-body" *ngIf="message.username !== 'SYSTEM'">
+                    <img src="http://localhost:3000/{{message.profileImage}}" alt="">{{message.username}}: {{message.message}}
                   </div>
+                  <div class="message-body" *ngIf="message.username === 'SYSTEM'">
+                        {{message.username}}: {{message.message}}
+                      </div>
               </article>
             </div>
           </div>
