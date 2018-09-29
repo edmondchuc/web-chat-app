@@ -23,7 +23,7 @@ export class ChannelComponent implements OnInit {
 
   newUsername:string = '';
 
-  messages = ['Start of the conversation...', 'Some sample chat text'];
+  messages;
   message:string = '';
 
   constructor(private router:Router, private usersService:UsersService, private socketService:SocketService) { 
@@ -34,10 +34,27 @@ export class ChannelComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.socketService.joinChannel();
-    this.socketService.getMessages().subscribe((message) => {
-      this.messages.push(message.message);
-    });
+    this.usersService.getChannelMessages(this.groupName, this.channelName).subscribe(
+      data => {
+        console.log("Received data for getting messages");
+        console.log(data);
+        this.messages = data;
+      },
+      err => {
+        console.error();
+      },
+      () => {
+        console.log("Getting messages for channel");
+      }
+    );
+
+    setTimeout(() => {
+      this.socketService.joinChannel();
+      this.socketService.getMessages().subscribe((message) => {
+        this.messages.push(message);
+      });
+    }, 100);
+    
   }
 
   logOut() {

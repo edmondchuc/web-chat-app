@@ -41,6 +41,8 @@ io.on('connection', (socket) => {
     socket.on('join', (content) => {
         console.log('someone joined');
         console.log(content);
+        const collection = db.collection("messages");
+        collection.insertOne(content);
         let room = content.groupName + content.channelName;
         socket.join(room);
         // socket.broadcast.in(room).emit(content);
@@ -50,6 +52,8 @@ io.on('connection', (socket) => {
     socket.on('leave', (content) => {
         console.log('Someone left');
         console.log(content);
+        const collection = db.collection("messages");
+        collection.insertOne(content);
         let room = content.groupName + content.channelName;
         socket.leave(room);
         // socket.broadcast.in(room).emit(content);
@@ -59,11 +63,24 @@ io.on('connection', (socket) => {
     socket.on('new-message', (content) => {
         console.log('NEW MESSAGE:');
         console.log(content);
+        const collection = db.collection("messages");
+        collection.insertOne(content);
         let room = content.groupName + content.channelName;
         // io.emit('message', content);
         io.sockets.in(room).emit('message', content);
     });
 
+});
+
+app.get('/api/channel/messages', (req, res) => {
+    console.log('GET request at /api/channel/messages');
+    const collection = db.collection("messages");
+    const groupName = req.query.groupName;
+    const channelName = req.query.channelName;
+    collection.find({"groupName": groupName, "channelName": channelName}).toArray( (err, result) => {
+        assert.strictEqual(err, null);
+        res.send(result);
+    });
 });
 
 /**

@@ -115,4 +115,13 @@ export class UsersService {
     }
     return this.http.post('api/makeUserSuperAdmin', JSON.stringify(body), this.genHeadersJSON());
   }
+
+  getChannelMessages(groupName:string, channelName:string) {
+    return this.http.get('api/channel/messages', {
+      params: {
+      "groupName": groupName,
+      "channelName": channelName
+      }
+    });
+  }
 }
