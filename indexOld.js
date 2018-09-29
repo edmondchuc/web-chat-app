@@ -467,7 +467,7 @@ app.post('/api/groups/add', (req, res) => {
     });
 });
 
-// add new user to a channel in a group
+// add new user to a channel in a group - DONE
 app.post('/api/group/channel/add', (req, res) => {
     console.log('POST request at /api/group/channel/add');
     console.log(req.body);
@@ -516,7 +516,7 @@ app.post('/api/group/channel/add', (req, res) => {
     });
 });
 
-// remove user from channel
+// remove user from channel - DONE
 app.delete('/api/removeUserFromChannel/:groupName.:channelName.:username', (req, res) => {
     console.log('DELETE request at /api/remove/:groupName.:channelName.:username');
     const username = req.params.username;
@@ -536,7 +536,7 @@ app.delete('/api/removeUserFromChannel/:groupName.:channelName.:username', (req,
     });
 });
 
-// remove user from the system
+// remove user from the system - DONE
 app.delete('/api/removeUserFromSystem/:username', (req, res) => {
     console.log('DELETE request at /api/removeUserFromSystem/:username');
     const username = req.params.username;

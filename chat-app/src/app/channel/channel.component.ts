@@ -142,9 +142,13 @@ export class ChannelComponent implements OnInit {
       return;
     }
     // check if they are an admin, if not, then proceed
-    if(this.allUsers[username].groupAdmin) {
-      alert(`Cannot remove admin user ${username}`);
-      return;
+    for(let user of this.allUsers) {
+      if(user.username === username) {
+        if(user.groupAdmin) {
+          alert(`Cannot remove admin user ${username}`);
+          return;
+        }
+      }
     }
     if(this.channelName === 'general') {
       alert('Cannot remove users from the default channel: general');

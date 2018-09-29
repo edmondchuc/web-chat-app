@@ -460,28 +460,6 @@ app.post('/api/groups/add', (req, res) => {
             );
             addUser(user);
         }
-
-        // if(users[username] === undefined) {
-        //     let user = userDataTemplate;
-        //     user.groups.push(
-        //         {
-        //             "name": groupName,
-        //             "channels": ["general"]
-        //         }
-        //     );
-        //     // addUser(username, user);
-        //     users[username] = user;
-        //     console.log('Adding new user');
-        // }
-        // else {
-        //     users[username].groups.push(
-        //         {
-        //             "name": groupName,
-        //             "channels": ["general"]
-        //         }
-        //     );
-        //     console.log('Adding existing user to group');
-        // }
         writeUsers(users, () => {
             console.log(users);
             // getAllUsersInGroup(groupName, res);
@@ -577,6 +555,79 @@ app.delete('/api/removeUserFromSystem/:username', (req, res) => {
         });
         // users[username] = undefined;
         
+    });
+});
+
+// remove user from channel
+app.delete('/api/removeUserFromChannel/:groupName.:channelName.:username', (req, res) => {
+    console.log('DELETE request at /api/remove/:groupName.:channelName.:username');
+    const username = req.params.username;
+    const groupName = req.params.groupName;
+    const channelName = req.params.channelName;
+    retrieveUsers((users) => {
+        for(user of users) {
+            if(user.username === username) {
+                for(group of user.groups) {
+                    if(group.name === groupName) {
+                        group.channels.splice(group.channels.indexOf(channelName), 1);
+                    }
+                }
+            }
+        }
+        // for(group of users[username].groups) {
+        //     if(group.name === groupName) {
+        //         console.log(group.channels);
+        //         console.log(group.channels.indexOf(channelName));
+        //         group.channels.splice(group.channels.indexOf(channelName), 1);
+        //     }
+        // }
+        writeUsers(users, () => {
+            setTimeout(() => {
+                res.send(users);
+            }, 100);
+        });
+    });
+});
+
+// make a user a group admin // TODO: check if this works
+app.post('/api/makeUserGroupAdmin', (req, res) => {
+    console.log('POST request at /api/makeUserGroupAdmin');
+    const username = req.body.username;
+    console.log(username);
+    retrieveUsers((users) => {
+        for(let user of users) {
+            if(user.username === username) {
+                user.groupAdmin = true;
+            }
+        }
+        writeUsers(users, () => {
+            setTimeout(() => {
+                res.send(users);
+            }, 100);
+        });
+    });
+});
+
+// make a user a super admin
+app.post('/api/makeUserSuperAdmin', (req, res) => {
+    console.log('POST request at /api/makeUserSuperAdmin');
+    const username = req.body.username;
+    console.log(username);
+    retrieveUsers((users) => {
+        // users[username].superAdmin = true;
+        // users[username].groupAdmin = true;
+
+        for(let user of users) {
+            if(user.username === username) {
+                user.groupAdmin = true;
+                user.superAdmin = true;
+            }
+        }
+        writeUsers(users, () => {
+            setTimeout(() => {
+                res.send(users);
+            }, 100);
+        });
     });
 });
 

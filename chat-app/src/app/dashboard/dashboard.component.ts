@@ -230,10 +230,18 @@ export class DashboardComponent implements OnInit {
       alert(`User ${this.usernameMakeAdmin} does not exist`);
       return;
     }
-    if(this.allUsers[this.usernameMakeAdmin].groupAdmin) {
-      alert('This user is already a group admin');
-      return;
+    for(let user of this.allUsers) {
+      if(user.username === this.usernameMakeAdmin) {
+        if(user.groupAdmin) {
+          alert('This user is already a group admin');
+          return;
+        }
+      }
     }
+    // if(this.allUsers[this.usernameMakeAdmin].groupAdmin) {
+    //   alert('This user is already a group admin');
+    //   return;
+    // }
     console.log(`Making user ${this.usernameMakeAdmin} group admin`);
     this.usersService.makeUserGroupAdmin(this.usernameMakeAdmin).subscribe(
       data => {
@@ -257,10 +265,18 @@ export class DashboardComponent implements OnInit {
       alert(`User ${this.usernameMakeAdmin} does not exist`);
       return;
     }
-    if(this.allUsers[this.usernameMakeAdmin].superAdmin) {
-      alert('This user is already a super admin');
-      return;
+    for(let user of this.allUsers) {
+      if(user.username === this.usernameMakeAdmin) {
+        if(user.superAdmin) {
+          alert('This user is already a super admin');
+          return;
+        }
+      }
     }
+    // if(this.allUsers[this.usernameMakeAdmin].superAdmin) {
+    //   alert('This user is already a super admin');
+    //   return;
+    // }
     console.log(`Making user ${this.usernameMakeAdmin} super admin`);
     this.usersService.makeUserSuperAdmin(this.usernameMakeAdmin).subscribe(
       data => {
