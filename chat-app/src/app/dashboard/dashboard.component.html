@@ -3,6 +3,20 @@
 <h2 class="subtitle is-3" *ngIf="!isGroupAdmin">Welcome {{username}}</h2>
 <h2 class="subtitle is-3" *ngIf="isGroupAdmin && !isSuperAdmin">Welcome {{username}}, you are a group admin</h2>
 
+<!-- Profile image -->
+<div *ngIf=userData>
+  <img src="http://localhost:3000/{{userData.profileImage}}" width=100px>
+  <!-- <img src="https://www.w3schools.com/w3css/img_lights.jpg" alt=""> -->
+</div>
+
+<!-- upload -->
+<form>
+  <input type="file" class="form-control" (change)="uploadSelected($event)" name="uploadFile" id="uploadFile"/>
+  <button (click)="upload()">Upload</button>
+</form>
+
+
+
 <div class="content">
   <br>
   <p>

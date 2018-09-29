@@ -124,4 +124,10 @@ export class UsersService {
       }
     });
   }
+
+  updateUser(username, userData) {
+    console.log('updating user data');
+    let body = userData;
+    return this.http.post('api/user/update', JSON.stringify(body), this.genHeadersJSON());
+  }
 }

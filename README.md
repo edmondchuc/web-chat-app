@@ -253,6 +253,7 @@ The Login component allows a user to log in. Any user can type any username and 
 * `npm install socket.io`
 * `npm install body-parser`
 * `npm install @types/socket.io-client` - SocketIO for client
+* `npm install formidable`
 
 ### Socket.IO Bug
 * In `polyfill.ts`, add:

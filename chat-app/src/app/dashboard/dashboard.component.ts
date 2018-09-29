@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UsersService } from '../users.service';
 import { Router } from "@angular/router";
 import { ChangeDetectorRef } from "@angular/core";
+import { ImageService } from '../image.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -33,12 +34,52 @@ export class DashboardComponent implements OnInit {
 
   usernameMakeAdmin:string = '';
 
-  constructor(private usersService:UsersService, private router:Router, private ref: ChangeDetectorRef) {
+  selectedFile = null;
+
+  constructor(private usersService:UsersService, private router:Router, private ref: ChangeDetectorRef, private imgService:ImageService) {
     this.getUser();
    }
 
   ngOnInit() {
     console.log("Logged in as " + this.username);
+  }
+
+  uploadSelected(event) {
+    console.log('Selected image!');
+    this.selectedFile = event.target.files[0];
+  }
+  
+  updateUser() {
+    this.usersService.updateUser(this.username, this.userData).subscribe(
+      data => {
+        
+      },
+      err => {
+        console.error;
+      },
+      () => {
+        
+      }
+    );
+  }
+
+  upload() {
+    console.log('Uploading image!');
+    const fd = new FormData();
+    fd.append('image', this.selectedFile, this.selectedFile.name);
+    this.imgService.upload(fd).subscribe(
+      data => {
+        console.log('Image upload received data');
+        this.userData.profileImage = data.path;
+        this.updateUser();
+      },
+      err => {
+        console.error;
+      },
+      () => {
+        console.log('Completed image upload');
+      }
+    );
   }
 
   getUser() {

@@ -7,6 +7,7 @@ const io = socketIO(server);
 const fs = require('fs');
 const bodyParser = require('body-parser')
 app.use(bodyParser.json())
+const formidable = require('formidable');
 
 // mongo requires
 const MongoClient = require('mongodb').MongoClient;
@@ -26,6 +27,7 @@ MongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
 
     // start the server
     app.use(express.static(__dirname + '/chat-app/dist/chat-app'));
+    app.use("/images", express.static(__dirname + '/images'));
     // const port = 3000;
     // app.listen(port, () => console.log(`Server listening on port ${port}`));
     const port = process.env.PORT || 3000;
@@ -72,6 +74,7 @@ io.on('connection', (socket) => {
 
 });
 
+// get messages for particular channel in a group
 app.get('/api/channel/messages', (req, res) => {
     console.log('GET request at /api/channel/messages');
     const collection = db.collection("messages");
@@ -83,6 +86,42 @@ app.get('/api/channel/messages', (req, res) => {
     });
 });
 
+// upload image
+app.post('/api/image/upload', (req, res) => {
+    console.log('POST request at /api/image/upload');
+    let form = new formidable.IncomingForm({ uploadDir: './images' });
+    form.keepExtensions = true;
+
+    form.on('error', (err) => {
+        // throw err;
+        console.log('error uploading fiel');
+        res.send({
+            result: "failed",
+            data: {},
+            numberOfImages: 0,
+            message: "Cannot upload images. Error: " + err
+        });
+    });
+
+    form.on('fileBegin', (name, file) => {
+        file.path = form.uploadDir + "/" + file.name;
+        console.log('File path: ' + file.path);
+    });
+
+    form.on('file', (field, file) => {
+        console.log('woo, uploaded file');
+        res.send({
+            result: 'OK',
+            data: {'filename': file.name, 'size': file.size},
+            numberOfImages: 1,
+            message: 'upload successful',
+            path: file.path
+        })
+    });
+
+    form.parse(req);
+});
+
 /**
  * The user data default template
  */
@@ -92,6 +131,7 @@ class UserDataTemplate {
         this.email = "";
         this.superAdmin = false;
         this.groupAdmin = false;
+        this.profileImage = "images/default/profile.gif";
         this.groups = [
             {
                 "name": "newbies",
@@ -154,9 +194,19 @@ function addUser(userData) {
     });
 }
 
+app.post('/api/user/update', (req, res) => {
+    console.log('POST request at /api/user/update');
+    const collection = db.collection(collectionName);
+    
+    let imagePath = req.body.profileImage;
+    imagePath = imagePath.slice(2);
+    console.log(imagePath);
+    collection.updateOne({"username": req.body.username}, {$set: {"profileImage": imagePath}});
+});
+
 // Return user data back to client
 app.get('/api/user', (req, res) => {
-    
+    // createSuperUser();
     const username = req.query.username;
     console.log('GET request at /api/user');
     console.log(`\tFetching user data for: ${username}`);
@@ -691,10 +741,11 @@ function createSuperUser() {
     const collection = db.collection(collectionName);
     collection.insertOne(
         {
-            "username": "Edmond",
-            "email": "edmond@admin.com",
+            "username": "edmond",
+            "email": "edmond@edmondchuc.com",
             "superAdmin": false,
             "groupAdmin": true,
+            "profileImage": "images/default/profile.gif",
             "groups": [
                 {
                     "name": "newbies",
