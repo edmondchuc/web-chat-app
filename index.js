@@ -37,10 +37,10 @@ MongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
 io.on('connection', (socket) => {
     console.log('Visitor connected');
 
-    socket.on('new-message', (message) => {
+    socket.on('new-message', (content) => {
         console.log('NEW MESSAGE:');
-        console.log('\t' + message);
-        io.emit('message', { type: 'message', text:message });
+        console.log(content);
+        io.emit('message', content);
     });
 });
 

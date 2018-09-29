@@ -34,8 +34,8 @@ export class ChannelComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.socketService.getMessages().subscribe((message:string) => {
-      this.messages.push(message);
+    this.socketService.getMessages().subscribe((message) => {
+      this.messages.push(message.message);
     });
   }
 
@@ -176,7 +176,7 @@ export class ChannelComponent implements OnInit {
 
   sendMessage() {
     console.log(`User typed: ${this.message}`);
-    this.socketService.sendMessage(this.username + ' said: ' + this.message);
+    this.socketService.sendMessage(this.username, this.groupName, this.channelName, this.message);
     this.message = '';
   }
 }

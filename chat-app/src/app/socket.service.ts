@@ -13,19 +13,32 @@ export class SocketService {
 
   constructor() { 
     this.socket = io(this.url);
-    this.socket.emit('new-message', localStorage.getItem('username') + ' has joined the chat.');
+    let content = {
+      "username": "SYSTEM",
+      "groupName": localStorage.getItem("currentGroup"),
+      "channelName": localStorage.getItem("currentChannel"),
+      "message": localStorage.getItem("username") + " has joined the chat"
+    }
+    this.socket.emit('new-message', content);
   }
 
-  public sendMessage(message) {
+  public sendMessage(username:string, groupName:string, channelName:string, message:string) {
     console.log("Sending: " + message);
-    this.socket.emit('new-message', message);
+    let content = {
+      "username": username,
+      "groupName": groupName,
+      "channelName": channelName,
+      "message": message
+    }
+    this.socket.emit('new-message', content);
   }
 
   public getMessages = () => {
     return Observable.create((observer) => {
-      this.socket.on('message', (message) => {
-        console.log('received message: ' + message);
-        observer.next(message.text);
+      this.socket.on('message', (content) => {
+        console.log('Received message:')
+        console.log(content);
+        observer.next(content);
       });
     });
   }
