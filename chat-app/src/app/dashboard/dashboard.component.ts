@@ -9,33 +9,38 @@ import { ImageService } from '../image.service';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
+
+// This component handles all the functionality in the dashboard view
 export class DashboardComponent implements OnInit {
+  // The user's details
   username:string = localStorage.getItem('username');
   email:string = '';
   emailField:string = '';
-  groups = [];
-  channels = [];
-  showGroupsBool = true;
-  showChannelsBool = false;
-  title:string = 'Dashboard';
-
   isGroupAdmin = false;
   isSuperAdmin = false;
+
+  // list of groups and channels
+  groups = [];
+  channels = [];
+
+  // booleans to show groups or not
+  // showGroupsBool = true;
+  // showChannelsBool = false;
+  title:string = 'Dashboard';
 
   // all of the user's data
   userData;
 
-  // groups retrieved if admin
+  // retrieve data on other users
   allGroups;
-
   allUsers;
-
   listOfUsers = [];
 
+  // bind for new user to be admin
   usernameMakeAdmin:string = '';
 
+  // the selected file for image upload
   selectedFile = null;
-
 
   // create new user fields
   newUserUsername = "";
@@ -57,11 +62,13 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  // get the file to be uploaded
   uploadSelected(event) {
     console.log('Selected image!');
     this.selectedFile = event.target.files[0];
   }
   
+  // update the user with new data
   updateUser() {
     this.usersService.updateUser(this.username, this.userData).subscribe(
       data => {
@@ -76,6 +83,7 @@ export class DashboardComponent implements OnInit {
     );
   }
 
+  // upload the image
   upload() {
     console.log('Uploading image!');
     const fd = new FormData();
@@ -100,6 +108,7 @@ export class DashboardComponent implements OnInit {
     );
   }
 
+  // get the user's data
   getUser() {
     this.usersService.getUser(this.username).subscribe(
       data => {
@@ -125,6 +134,7 @@ export class DashboardComponent implements OnInit {
     );
   }
 
+  // update the user's email
   updateEmail() {
     this.usersService.updateEmail(this.username, this.emailField)
     .subscribe(
@@ -143,6 +153,7 @@ export class DashboardComponent implements OnInit {
     );
   }
 
+  // log out
   logOut() {
     this.router.navigateByUrl('/');
   }
@@ -165,8 +176,10 @@ export class DashboardComponent implements OnInit {
     
   }
 
+  // the bind for the new group name
   createGroupName:string = '';
 
+  // create a new group
   createGroup() {
     if(this.allGroups.includes(this.createGroupName)) {
       alert(`Group ${this.createGroupName} already exists`);
@@ -191,6 +204,7 @@ export class DashboardComponent implements OnInit {
     );
   }
 
+  // get all groups and their data
   getGroups() {
     if(this.isSuperAdmin || this.isGroupAdmin) {
       console.log('Admin fetching all groups');
@@ -230,6 +244,7 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  // update the user's list 
   updateAllUsersList() {
     this.listOfUsers = [];
     // for(let user in this.allUsers) {
@@ -240,6 +255,7 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  // get all the data of the users
   getDataAllUsers() {
     if(this.isSuperAdmin) {
       this.usersService.getDataAllUsers().subscribe(
@@ -259,6 +275,7 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  // remove a user from system
   removeUserFromSystem(username:string) {
     if(username === 'Super') {
       alert('Cannot remove user Super');
@@ -280,6 +297,7 @@ export class DashboardComponent implements OnInit {
     );
   }
 
+  // make a user a group admin
   userMakeAdminGroup() {
     if(this.usernameMakeAdmin === '') {
       alert('Username cannot be blank');
@@ -297,10 +315,6 @@ export class DashboardComponent implements OnInit {
         }
       }
     }
-    // if(this.allUsers[this.usernameMakeAdmin].groupAdmin) {
-    //   alert('This user is already a group admin');
-    //   return;
-    // }
     console.log(`Making user ${this.usernameMakeAdmin} group admin`);
     this.usersService.makeUserGroupAdmin(this.usernameMakeAdmin).subscribe(
       data => {
@@ -315,6 +329,7 @@ export class DashboardComponent implements OnInit {
     );
   }
 
+  // make a user a super admin
   userMakeAdminSuper() {
     if(this.usernameMakeAdmin === '') {
       alert('Username cannot be blank');
@@ -332,10 +347,6 @@ export class DashboardComponent implements OnInit {
         }
       }
     }
-    // if(this.allUsers[this.usernameMakeAdmin].superAdmin) {
-    //   alert('This user is already a super admin');
-    //   return;
-    // }
     console.log(`Making user ${this.usernameMakeAdmin} super admin`);
     this.usersService.makeUserSuperAdmin(this.usernameMakeAdmin).subscribe(
       data => {
@@ -350,6 +361,7 @@ export class DashboardComponent implements OnInit {
     );
   }
 
+  // create a new user
   createUser() {
     if(this.newUserUsername === "") {
       alert('Username field cannot be blank');

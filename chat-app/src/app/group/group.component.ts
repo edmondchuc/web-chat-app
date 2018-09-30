@@ -8,21 +8,25 @@ import { SocketService } from '../socket.service';
   templateUrl: './group.component.html',
   styleUrls: ['./group.component.css']
 })
+
+// This component handles all the functionalities of a group
 export class GroupComponent implements OnInit {
+  // the user's data
   groupName:string = '';
   username:string = '';
   channels; // list of channels for users with no admin roles
-
   isGroupAdmin = false;
   isSuperAdmin = false;
 
+  // bind for new channel name
   createChannelName:string = '';
 
+  // the user's other data
   userData;
 
   allChannels; // list of channels for users with admin roles
 
-  testSuperAdmin = false;
+  testSuperAdmin = false; // used in a test
 
   allUsers; // all users that exist in this group
 
@@ -38,6 +42,7 @@ export class GroupComponent implements OnInit {
     
   }
 
+  // get the user's data
   getUser() {
     this.usersService.getUser(this.username).subscribe(
       data => {
@@ -76,6 +81,7 @@ export class GroupComponent implements OnInit {
     this.router.navigateByUrl('/');
   }
 
+  // route to the channel to view
   viewChannel(channel) {
     console.log(`Viewing channel ${channel}`);
     
@@ -88,6 +94,7 @@ export class GroupComponent implements OnInit {
     this.router.navigateByUrl('/channel');
   }
 
+  // create a new channel
   createChannel() {
     if(this.createChannelName === '') {
       alert('New channel name cannot be empty');
@@ -117,6 +124,7 @@ export class GroupComponent implements OnInit {
     );
   }
 
+  // remove a channel
   removeChannel(channel) {
     if(channel === 'general') {
       alert(`Cannot remove default channel ${channel}`);
@@ -142,6 +150,7 @@ export class GroupComponent implements OnInit {
     );
   }
 
+  // get all channels in the group
   getChannels() {
     // console.log(`Group admin: ${this.isGroupAdmin} Super admin: ${this.isSuperAdmin}`);
     if(this.isGroupAdmin || this.isSuperAdmin) {
@@ -162,6 +171,7 @@ export class GroupComponent implements OnInit {
     }
   }
 
+  // get all users in the group
   getGroupUsers() {
     console.log(`Function: Getting users for group ${this.groupName}`);
     this.usersService.getGroupUsers(this.groupName).subscribe(
@@ -179,6 +189,7 @@ export class GroupComponent implements OnInit {
     );
   }
 
+  // get all the data on users in the group
   getDataAllUsers() {
     if(!this.isGroupAdmin) return;
     console.log('Getting all user data from server');
@@ -197,6 +208,7 @@ export class GroupComponent implements OnInit {
     );
   }
 
+  // remove user from group
   removeUser(user:string) {
     if(this.groupName === 'newbies' || this.groupName === 'general') {
       alert('Cannot remove users in this default channel');
@@ -216,10 +228,6 @@ export class GroupComponent implements OnInit {
         }
       }
     }
-    // if(this.allUserData[user].groupAdmin) {
-    //   alert(`Cannot remove admin user ${user}`);
-    //   return;
-    // }
     console.log(`Removing user ${user}`);
     this.usersService.removeUserInGroup(user, this.groupName).subscribe(
       data => {
@@ -236,6 +244,7 @@ export class GroupComponent implements OnInit {
     );
   }
 
+  // update the users list
   updateAllUsersList() {
     this.allUsers = [];
     for(let i = 0; i < this.allUserData.length; i++) {
@@ -248,19 +257,9 @@ export class GroupComponent implements OnInit {
       }
     }
     console.log(this.allUserData);
-
-    // for(let user in this.allUserData) {
-    //   if(this.allUserData.hasOwnProperty(user)) {
-    //     for(let group of this.allUserData[user].groups) {
-    //       console.log(group);
-    //       if(group.name === this.groupName) {
-    //         this.allUsers.push(user);
-    //       }
-    //     }
-    //   }
-    // }
   }
 
+  // add a new user to a group
   addUserToGroup() {
     if(this.newUsername === '') {
       alert('New user\'s username cannot be empty');

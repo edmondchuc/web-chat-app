@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
+
+// This service handles the socket communication
 export class SocketService {
 
   private url = 'http://localhost:3000';
@@ -15,6 +17,7 @@ export class SocketService {
     
   }
 
+  // join a channel
   public joinChannel() {
     this.socket = io(this.url);
     let content = {
@@ -26,6 +29,7 @@ export class SocketService {
     this.socket.emit('join', content);
   }
 
+  // leave a channel
   public leaveChannel() {
     let content = {
       "username": "SYSTEM",
@@ -36,6 +40,7 @@ export class SocketService {
     this.socket.emit('leave', content);
   }
 
+  // send a new message (text or image)
   public sendMessage(username:string, groupName:string, channelName:string, message:string, profileImage:string, isFile:boolean) {
     console.log("Sending: " + message);
     let content = {
@@ -49,6 +54,7 @@ export class SocketService {
     this.socket.emit('new-message', content);
   }
 
+  // get messages
   public getMessages = () => {
     return Observable.create((observer) => {
       this.socket.on('message', (content) => {

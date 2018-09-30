@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
+
+// This service handles the upload of images
 export class ImageService {
 
   constructor(private http:HttpClient) { 

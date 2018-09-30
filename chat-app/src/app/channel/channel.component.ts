@@ -9,24 +9,33 @@ import { ImageService } from '../image.service';
   templateUrl: './channel.component.html',
   styleUrls: ['./channel.component.css']
 })
+
+// This component handles all the functionalities of a channel
 export class ChannelComponent implements OnInit {
+  // user details stored in localStorage
   channelName:string = '';
   username:string = '';
   groupName:string = '';
 
+  // other user details
   userData;
   isGroupAdmin = false;
   isSuperAdmin = false;
 
+  // data on all users
   allUsers;
 
+  // list of users as strings
   listOfUsers = [];
 
+  // create new user bind
   newUsername:string = '';
 
+  // the messages of the channel
   messages;
   message:string = '';
 
+  // upload files
   isFile = false;
   selectedFile = null;
 
@@ -61,10 +70,12 @@ export class ChannelComponent implements OnInit {
     
   }
 
+  // log the user out
   logOut() {
     this.router.navigateByUrl('/');
   }
 
+  // get this user's data
   getUser() {
     this.usersService.getUser(this.username).subscribe(
       data => {
@@ -96,18 +107,10 @@ export class ChannelComponent implements OnInit {
           }
         }
       }
-      // if(this.allUsers.hasOwnProperty(user)) {
-      //   for(let group of this.allUsers[user].groups) {
-      //     if(group.name === this.groupName) {
-      //       if(group.channels.includes(this.channelName)) {
-      //         this.listOfUsers.push(user);
-      //       }
-      //     }
-      //   }
-      // }
     }
   }
 
+  // get the data on all users in this channel
   getDataAllUsers() {
     this.usersService.getDataAllUsers().subscribe(
       data => {
@@ -125,6 +128,7 @@ export class ChannelComponent implements OnInit {
     );
   }
 
+  // add a new user to the channel
   addUserToChannel() {
     if(this.channelName === 'general') {
       alert('Cannot add users to default channel: general');
@@ -158,6 +162,7 @@ export class ChannelComponent implements OnInit {
     );
   }
 
+  // remove the user from the channel
   removeUser(username:string) {
     if(this.groupName === 'newbies' || this.groupName === 'general') {
       alert('Cannot remove users in this default channel');
@@ -196,6 +201,7 @@ export class ChannelComponent implements OnInit {
     );
   }
 
+  // send a new message to the channel
   sendMessage() {
     console.log(`User typed: ${this.message}`);
     this.socketService.sendMessage(this.username, this.groupName, this.channelName, this.message, this.userData.profileImage, this.isFile);
@@ -203,12 +209,13 @@ export class ChannelComponent implements OnInit {
     this.isFile = false;
   }
 
-
+  // select the file to be uploaded
   uploadSelected(event) {
     console.log('Selected image!');
     this.selectedFile = event.target.files[0];
   }
 
+  // upload the file
   upload() {
     console.log('Uploading image!');
     const fd = new FormData();
@@ -223,9 +230,6 @@ export class ChannelComponent implements OnInit {
         this.message = data.path;
         this.isFile = true;
         this.sendMessage();
-
-        // this.userData.profileImage = data.path;
-        // this.updateUser();
       },
       err => {
         console.error;

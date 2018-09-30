@@ -7,6 +7,8 @@ import { UsersService } from "../users.service";
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
+
+// This component handles all the functionality of the login page
 export class LoginComponent implements OnInit {
   username:string = "";
   password:string = "";
@@ -17,6 +19,7 @@ export class LoginComponent implements OnInit {
     localStorage.clear();
   }
 
+  // log the user in
   login() {
     if(this.username === "") {
       alert("Username field cannot be empty");
