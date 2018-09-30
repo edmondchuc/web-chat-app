@@ -128,6 +128,7 @@ app.post('/api/image/upload', (req, res) => {
 class UserDataTemplate {
     constructor() {
         this.username = "";
+        this.password = "password";
         this.email = "";
         this.superAdmin = false;
         this.groupAdmin = false;

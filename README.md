@@ -1,9 +1,5 @@
 # Web Chat App
-This repository contains a real-time web chat application implemented using Node.js, Express, Socket.IO, RxJS and Angular.  
-
-## TODO
-* Validate user's login via username and password
-* Super admin can create users in their dashboard
+This repository contains a real-time web chat application implemented using Node.js, Express, Socket.IO, RxJS and Angular. It contains users and admins with groups and channels.
 
 ## Status
 This application currently holds the following functionality:  
@@ -29,6 +25,8 @@ The root directory of the repository contains the `README.md` file and the files
 The `chat-app` directory contains all the auto-generated files. The project's files are contained inside the `src/app` sub-directory. In here, there are four directories, each containing its respective Angular Component. It also contains TypeScript files for Angular services.  
   
 The approach of using Git in this project was to commit changes at any time a new functionality was added. An example would be a task to add functionality for a user. The task would be broken down into sub-tasks and when a sub-task has been implemented, a commit would be added to Git.  
+
+Ensure that the root directory of the Git repository contains an `images` directory. This directory is where the uploaded images are saved and statically served back to the user. 
   
 ## Data Structures
 The main data structures that were used in this project were JavaScrict `Array` objects and JavaScript `Object` objects.  
@@ -38,28 +36,55 @@ The JavaScript `Array` was mainly used to store things that required easy iterat
 * List of channels
 * List of groups
 
+### Users
 The JavaScript `Object` was mainly used to store the user data in a JSON file. The basic template of a user `Object` looks like this:
 ```javascript
-const userDataTemplate = {
-    "email": "",
-    "superAdmin": false,
-    "groupAdmin": false,
-    "groups": [
-        {
-            "name": "newbies",
-            "channels": ["general", "help"]
-        },
-        {
-            "name": "general",
-            "channels": ["general", "chitchat", "topic of the day"]
-        }
-    ]
-}
+class UserDataTemplate {
+    constructor() {
+        this.username = "";
+        this.password = "password";
+        this.email = "";
+        this.superAdmin = false;
+        this.groupAdmin = false;
+        this.profileImage = "images/default/profile.gif";
+        this.groups = [
+            {
+                "name": "newbies",
+                "channels": [
+                    "general", 
+                    "help"
+                ]
+            },
+            {
+                "name": "general",
+                "channels": [
+                    "general", 
+                    "chitchat", 
+                    "topic of the day"
+                ]
+            }
+        ]
+    }
+};
 ```
 
 The user's username would be the key to the `Object` value and each user was stored in a `users.json` file which contained an `Object` of users as properties. 
 
 JSON was also used to store the (data of the) body parameters of POST requests where the request or the response was encoded in JSON. 
+
+### Messages
+The data structure to store messages were also done by using a JSON `Object`. 
+```javascript
+let content = {
+      "username": username,
+      "groupName": groupName,
+      "channelName": channelName,
+      "message": message,
+      "profileImage": profileImage,
+      "isFile": isFile
+    }
+```
+The username is used to show the user's name who sent the message. The group and channel name are unique IDs for the message. The message itself is a string of text. The `profileImage` is a path string to the statically served profile image on the server. The `isFile` is a boolean which denotes whether this message is a text message or an image file being sent.
 
 ## REST API
 The REST API on the Node.js server was implemented using the Express library. 
@@ -240,6 +265,23 @@ Group admins can also add users to the group and remove users from the group. Ad
 
 #### Login
 The Login component allows a user to log in. Any user can type any username and log in. User data will persist after they log out. If a username does not exist in the system, the server will seamlessly create the user in the background. 
+
+### Services
+#### Image
+The image service handles the upload of images to the server. It contains a function that performs a POST request to the server. 
+
+#### Socket
+The socket service handles the web socket communications in real-time. The sockets contain three rooms:
+* join
+* leave
+* new-message
+
+Join notifies the server that the user has joined the channel. Leave notifies the server that the user has left the channel. New-message is used for new messages, which may be text or images. 
+
+The server responds in the message room, broadcasting only to the room which it originally received from. 
+
+#### Users
+The users service contains the requests for all dashboard, groups and channel data manipulation to and from the server. 
 
 ## MongoDB
 ### Collections
