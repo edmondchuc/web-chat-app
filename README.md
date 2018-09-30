@@ -86,6 +86,11 @@ let content = {
 ```
 The username is used to show the user's name who sent the message. The group and channel name are unique IDs for the message. The message itself is a string of text. The `profileImage` is a path string to the statically served profile image on the server. The `isFile` is a boolean which denotes whether this message is a text message or an image file being sent.
 
+## Separation of Responsibilities
+The chat application is separated into two parts, the client and the server. The client is created using the Angular framework. The client manages the models and views (components in Angular), which involves the dashboard, groups, channels and login. These components make up the single-page application (SPA) of the web chat app. 
+
+The server (back-end) is RESTful because it does not maintain any state. It has a number of routes which manages CRUD actions. The server connects to a MongoDB database which contains the data on the users and their messages, channels, groups and other information. 
+
 ## REST API
 The REST API on the Node.js server was implemented using the Express library. 
 
