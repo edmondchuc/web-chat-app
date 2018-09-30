@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { UsersService } from '../users.service';
 import { SocketService } from '../socket.service';
+import { ImageService } from '../image.service';
 
 @Component({
   selector: 'app-channel',
@@ -26,7 +27,10 @@ export class ChannelComponent implements OnInit {
   messages;
   message:string = '';
 
-  constructor(private router:Router, private usersService:UsersService, private socketService:SocketService) { 
+  isFile = false;
+  selectedFile = null;
+
+  constructor(private router:Router, private usersService:UsersService, private socketService:SocketService, private imgService:ImageService) { 
     this.channelName = localStorage.getItem('currentChannel');
     this.username = localStorage.getItem('username');
     this.groupName = localStorage.getItem('currentGroup');
@@ -194,7 +198,43 @@ export class ChannelComponent implements OnInit {
 
   sendMessage() {
     console.log(`User typed: ${this.message}`);
-    this.socketService.sendMessage(this.username, this.groupName, this.channelName, this.message, this.userData.profileImage);
+    this.socketService.sendMessage(this.username, this.groupName, this.channelName, this.message, this.userData.profileImage, this.isFile);
     this.message = '';
+    this.isFile = false;
   }
+
+
+  uploadSelected(event) {
+    console.log('Selected image!');
+    this.selectedFile = event.target.files[0];
+  }
+
+  upload() {
+    console.log('Uploading image!');
+    const fd = new FormData();
+    fd.append('image', this.selectedFile, this.selectedFile.name);
+    console.log(this.selectedFile.name);
+    this.imgService.upload(fd).subscribe(
+      data => {
+        console.log('Image upload received data');
+        // console.log("path of image file: " + data.path);
+        // once data comes back, set this.mesage to the data path and set isFile to true
+        // send a socket message
+        this.message = data.path;
+        this.isFile = true;
+        this.sendMessage();
+
+        // this.userData.profileImage = data.path;
+        // this.updateUser();
+      },
+      err => {
+        console.error;
+      },
+      () => {
+        console.log('Completed image upload');
+      }
+    );
+  }
+
+
 }

@@ -36,14 +36,15 @@ export class SocketService {
     this.socket.emit('leave', content);
   }
 
-  public sendMessage(username:string, groupName:string, channelName:string, message:string, profileImage) {
+  public sendMessage(username:string, groupName:string, channelName:string, message:string, profileImage:string, isFile:boolean) {
     console.log("Sending: " + message);
     let content = {
       "username": username,
       "groupName": groupName,
       "channelName": channelName,
       "message": message,
-      "profileImage": profileImage
+      "profileImage": profileImage,
+      "isFile": isFile
     }
     this.socket.emit('new-message', content);
   }

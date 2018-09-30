@@ -30,12 +30,19 @@
           <div class="notification">
             <div *ngFor="let message of messages">
               <article class="message is-primary">
-                  <div class="message-body" *ngIf="message.username !== 'SYSTEM'">
-                    <img src="http://localhost:3000/{{message.profileImage}}" alt="">{{message.username}}: {{message.message}}
-                  </div>
-                  <div class="message-body" *ngIf="message.username === 'SYSTEM'">
-                        {{message.username}}: {{message.message}}
-                      </div>
+
+                    <!-- display image as message -->
+                    <div class="message-body" *ngIf="message.username !== 'SYSTEM' && message.isFile === true">
+                        <img src="http://localhost:3000/{{message.profileImage}}" width="20px" style="margin-right:10px;" alt="">{{message.username}}: <img src="http://localhost:3000/{{message.message}}" alt="">
+                    </div>
+
+                    <!-- display message as text -->
+                    <div class="message-body" *ngIf="message.username !== 'SYSTEM' && message.isFile === false">
+                        <img src="http://localhost:3000/{{message.profileImage}}" width="20px" style="margin-right:10px;" alt="">{{message.username}}: {{message.message}}
+                    </div>
+                    <div class="message-body" *ngIf="message.username === 'SYSTEM'">
+                            {{message.username}}: {{message.message}}
+                    </div>
               </article>
             </div>
           </div>
@@ -51,6 +58,12 @@
                 <div class="navbar-item">
                   <input [(ngModel)]="message" (keyup)="$event.keyCode == 13 && sendMessage()" />
                   <button (click)="sendMessage()">Send</button>
+                </div>
+                <div class="navbar-item">
+                    <!-- <input [(ngModel)]="message" (keyup)="$event.keyCode == 13 && sendMessage()" />
+                    <button (click)="sendMessage()">Upload image</button> -->
+                    <input type="file" class="form-control" (change)="uploadSelected($event)" name="uploadFile" id="uploadFile"/>
+                    <button (click)="upload()">Upload</button>
                 </div>
             </div>
         </div>
