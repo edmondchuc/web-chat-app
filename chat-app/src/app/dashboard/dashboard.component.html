@@ -1,85 +1,164 @@
-<h1 class="title is-1">{{title}}</h1>
-<h2 class="subtitle is-3" *ngIf="isSuperAdmin && isGroupAdmin">Welcome {{username}}, you are a super admin</h2>
-<h2 class="subtitle is-3" *ngIf="!isGroupAdmin">Welcome {{username}}</h2>
-<h2 class="subtitle is-3" *ngIf="isGroupAdmin && !isSuperAdmin">Welcome {{username}}, you are a group admin</h2>
-
-<!-- Profile image -->
-<div *ngIf=userData>
-  <img src="http://localhost:3000/{{userData.profileImage}}" width=100px>
-  <!-- <img src="https://www.w3schools.com/w3css/img_lights.jpg" alt=""> -->
-</div>
-
-<!-- upload -->
-<form>
-  <input type="file" class="form-control" (change)="uploadSelected($event)" name="uploadFile" id="uploadFile"/>
-  <button (click)="upload()">Upload</button>
-</form>
-
-
-
-<div class="content">
-  <br>
-  <p>
-    Your email is registered as: {{email}}
-  </p>
-  <form (submit)="updateEmail($event)">
-    <input class="input" type="email" [(ngModel)]='emailField' name='emailField' placeholder="example@email.com">
-    <div class="control">
-      <button class="button is-primary">Update email</button>
+<section class="hero has-background-primary">
+    <div class="hero-body">
+      <div class="container">
+          <h1 class="title is-1">{{title}}</h1>
+          <button class="button is-light" (click)="logOut()">Log out</button>
+      </div>
     </div>
-  </form>
+  </section>
 
-  <br>
-  <br>
-  <button (click)="logOut()">Log out</button>
-</div>
+<div class="container">
+  <div class="notification">
+      <h2 class="subtitle is-3" *ngIf="isSuperAdmin && isGroupAdmin">Welcome {{username}}, you are a super admin</h2>
+      <h2 class="subtitle is-3" *ngIf="!isGroupAdmin">Welcome {{username}}</h2>
+      <h2 class="subtitle is-3" *ngIf="isGroupAdmin && !isSuperAdmin">Welcome {{username}}, you are a group admin</h2>
+      
 
+      
+      
+      <!-- upload -->
+      <div class="box">
+        <!-- Profile image -->
+        <div *ngIf=userData>
+            <img src="http://localhost:3000/{{userData.profileImage}}" width=100px>
+            <!-- <img src="https://www.w3schools.com/w3css/img_lights.jpg" alt=""> -->
+        </div>
 
-<div *ngIf="isGroupAdmin || isSuperAdmin" class="container">
-    <div class="notification">
-      <form (submit)="createGroup($event)">
-        <div class="field has-addons has-addons-centered">
-            <label class="label is-large">New group name:</label>
-            <div class="control">
-                <input class="input" type="text" placeholder="group name" [(ngModel)]='createGroupName' id='createGroupName' name='createGroupName'>
+        <p>Upload a new profile image</p>
+          <form>
+            <div class="file has-name">
+                <input class="file-input" type="file" class="form-control" (change)="uploadSelected($event)" name="uploadFile" id="uploadFile"/>
+                <button class="button is-light" (click)="upload()">Upload</button>
             </div>
-            <div class="control">
-              <button class="button is-primary">Create group</button>
+              
+              
+            </form>
+      </div>
+      
+      
+        
+      
+      <div class="content">
+        <div class="box">
+            <p>
+              Your email is registered as: {{email}}
+            </p>
+            <form (submit)="updateEmail($event)">
+              <input class="input" type="email" [(ngModel)]='emailField' name='emailField' placeholder="example@email.com">
+              <div class="control">
+                <button class="button is-primary">Update email</button>
+              </div>
+            </form>
+        </div>
+      </div>
+      
+      <div class="box">
+          <div *ngIf="isGroupAdmin || isSuperAdmin" class="container">
+            <form (submit)="createGroup($event)">
+              <div class="field has-addons has-addons-centered">
+                  <label class="label is-large">New group name:</label>
+                  <div class="control">
+                      <input class="input" type="text" placeholder="group name" [(ngModel)]='createGroupName' id='createGroupName' name='createGroupName'>
+                  </div>
+                  <div class="control">
+                    <button class="button is-primary">Create group</button>
+                  </div>
+              </div>
+            </form>
+          </div>
+      </div>
+      
+  
+
+      <div class="box">
+          <h2 class="title is-3">Your groups:</h2>
+          <ul *ngIf="groups && (!isGroupAdmin && !isSuperAdmin)">
+              <li *ngFor="let group of groups">
+                  Group: {{group.name}} <button (click)="viewGroup(group)">View channels</button>
+              </li>
+          </ul>
+          
+          <!-- <h2 *ngIf="isGroupAdmin || isSuperAdmin" class="title is-3">Admin panel for groups:</h2> -->
+          <ul *ngIf="allGroups && (isGroupAdmin || isSuperAdmin)">
+              <li *ngFor="let group of allGroups">
+                  Group: {{group}} <button (click)="viewGroup(group)">View channels</button> <button (click)="removeGroup(group)">Remove group</button>
+              </li>
+          </ul>
+          
+          
+      </div>
+
+      <div *ngIf="isSuperAdmin">
+        <div class="box">
+            <h2 class="title is-3">Create new user:</h2>
+            <div class="field">
+                <label class="label">Username</label>
+                <div class="control">
+                  <div class="columns">
+                    <div class="column is-two-fifths">
+                        <input class="input" type="text" placeholder="username" [(ngModel)]="newUserUsername" name="newUserUsername">
+                    </div>
+                  </div>
+                </div>
+
+                <label class="label">Password</label>
+                <div class="control">
+                  <div class="columns">
+                    <div class="column is-two-fifths">
+                        <input class="input" type="text" placeholder="password" [(ngModel)]="newUserPassword" name="newUserPassword">
+                    </div>
+                  </div>
+                </div>
+
+                <label class="label">Email</label>
+                <div class="control">
+                  <div class="columns">
+                    <div class="column is-two-fifths">
+                        <input class="input" type="email" placeholder="email" [(ngModel)]="newUserEmail" name="newUserEmail">
+                    </div>
+                  </div>
+                </div>
+                <br>
+                <div class="control">
+                    <button class="button" (click)="createUser()">Create user</button>
+                </div>
             </div>
         </div>
-      </form>
-    </div>
+
+          <div class="box">
+            <h2 class="title is-3">Users in chat system:</h2>
+            <div class="box">
+                <input class="input" type="text" placeholder="username" [(ngModel)]='usernameMakeAdmin' id='usernameMakeAdmin' name='usernameMakeAdmin'>
+                <button (click)="userMakeAdminGroup()">Make user a group admin</button>
+                <button (click)="userMakeAdminSuper()">Make user a super admin</button>
+            </div>
+            
+            <br>
+            <ul>
+                <li *ngFor="let user of listOfUsers">
+                  <div class="box">
+                    <div class="columns">
+                      <div class="column">
+                          User: {{user}} 
+                      </div>
+                      <div class="column">
+                          <button class="button is-danger is-small" (click)="removeUserFromSystem(user)">Remove user from system</button>
+                      </div>
+                    </div>
+                      
+                      
+                      
+                    </div>
+                      
+                      
+                    
+                </li>
+            </ul>
+          </div>
+      </div>
+      
+      
   </div>
-
-<br>
-<br>
-<h2 class="title is-3">Your groups:</h2>
-<ul *ngIf="groups && (!isGroupAdmin && !isSuperAdmin)">
-    <li *ngFor="let group of groups">
-        Group: {{group.name}} <button (click)="viewGroup(group)">View channels</button>
-    </li>
-</ul>
-
-<!-- <h2 *ngIf="isGroupAdmin || isSuperAdmin" class="title is-3">Admin panel for groups:</h2> -->
-<ul *ngIf="allGroups && (isGroupAdmin || isSuperAdmin)">
-    <li *ngFor="let group of allGroups">
-        Group: {{group}} <button (click)="viewGroup(group)">View channels</button> <button (click)="removeGroup(group)">Remove group</button>
-    </li>
-</ul>
-
-<div *ngIf="isSuperAdmin">
-  <br>
-  <br>
-  <h2 class="title is-3">Users in chat system:</h2>
-  <input type="text" placeholder="username" [(ngModel)]='usernameMakeAdmin' id='usernameMakeAdmin' name='usernameMakeAdmin'>
-  <button (click)="userMakeAdminGroup()">Make user a group admin</button>
-  <button (click)="userMakeAdminSuper()">Make user a super admin</button>
-  <br>
-  <ul>
-      <li *ngFor="let user of listOfUsers">
-          User: {{user}} 
-          <button (click)="removeUserFromSystem(user)">Remove user from system</button>
-      </li>
-  </ul>
 </div>
+
 

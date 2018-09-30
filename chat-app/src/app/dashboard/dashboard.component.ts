@@ -36,6 +36,12 @@ export class DashboardComponent implements OnInit {
 
   selectedFile = null;
 
+
+  // create new user fields
+  newUserUsername = "";
+  newUserPassword = "";
+  newUserEmail = "";
+
   constructor(private usersService:UsersService, private router:Router, private ref: ChangeDetectorRef, private imgService:ImageService) {
     this.getUser();
    }
@@ -331,4 +337,10 @@ export class DashboardComponent implements OnInit {
       }
     );
   }
+
+  createUser() {
+    console.log('Creating new user!');
+    console.log(this.newUserUsername, this.newUserPassword, this.newUserEmail);
+  }
+
 }

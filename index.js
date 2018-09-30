@@ -741,9 +741,10 @@ function createSuperUser() {
     const collection = db.collection(collectionName);
     collection.insertOne(
         {
-            "username": "edmond",
-            "email": "edmond@edmondchuc.com",
-            "superAdmin": false,
+            "username": "Super",
+            "password": "password",
+            "email": "super@admin.com",
+            "superAdmin": true,
             "groupAdmin": true,
             "profileImage": "images/default/profile.gif",
             "groups": [
