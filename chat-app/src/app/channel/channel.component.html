@@ -1,16 +1,25 @@
-<div class="container">
-    <div class="notification">
+<section class="hero has-background-primary">
+    <div class="hero-body">
+        <div class="container">
             <h1 class="title is-1">Channel: {{channelName}}</h1>
             <h2 class="subtitle is-5">User: {{username}}</h2>
-            <button (click)="logOut()">Log out</button>
-        
+            <button class="button is-light" (click)="logOut()">Log out</button>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <div class="notification">
+            
+            
+        <div class="box">
             <div *ngIf="isGroupAdmin">
                 <input class="" type="text" placeholder="username" [(ngModel)]='newUsername' id='newUsername' name='newUsername'>
                 <button (click)="addUserToChannel()">Add new user</button>
             </div>
+        </div>    
         
-            <br>
-            <br>
+        <div class="box">
             <h2 class="title is-3">Users in channel:</h2>
             <ul *ngIf="listOfUsers && (!isSuperAdmin && !isGroupAdmin)">
                 <li *ngFor="let user of listOfUsers">
@@ -22,6 +31,7 @@
                     User: {{user}} <button (click)="removeUser(user)">Remove user</button>
                 </li>
             </ul>
+        </div>
         
         
         
