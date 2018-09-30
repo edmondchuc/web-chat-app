@@ -130,4 +130,23 @@ export class UsersService {
     let body = userData;
     return this.http.post('api/user/update', JSON.stringify(body), this.genHeadersJSON());
   }
+
+  validateUser(username:string, password:string) {
+    let body = {
+      "username": username,
+      "password": password
+    }
+    return this.http.post('api/user/validate', JSON.stringify(body), this.genHeadersJSON());
+  }
+
+  createUser(username:string, password:string, email:string) {
+    let body = {
+      "username": username,
+      "password": password,
+      "email": email
+    }
+    return this.http.post('api/user/create', JSON.stringify(body), this.genHeadersJSON());
+  }
+
+
 }

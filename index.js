@@ -194,6 +194,7 @@ function addUser(userData) {
     });
 }
 
+// update user profile image
 app.post('/api/user/update', (req, res) => {
     console.log('POST request at /api/user/update');
     const collection = db.collection(collectionName);
@@ -202,6 +203,7 @@ app.post('/api/user/update', (req, res) => {
     imagePath = imagePath.slice(2);
     console.log(imagePath);
     collection.updateOne({"username": req.body.username}, {$set: {"profileImage": imagePath}});
+    res.send({"success": true});
 });
 
 // Return user data back to client
@@ -733,6 +735,77 @@ app.post('/api/makeUserSuperAdmin', (req, res) => {
             }, 100);
         });
     });
+});
+
+app.post('/api/user/validate', (req, res) => {
+    console.log("POST request at /api/user/validate");
+    let username = req.body.username;
+    let password = req.body.password;
+
+    console.log(username, password);
+    const collection = db.collection(collectionName);
+    collection.find({"username": username}).toArray( (err, result) => {
+        // assert.strictEqual(err, null);
+        console.log(result);
+
+        // no user found
+        if(result.length === 0) {
+            res.send({"success": false});
+        } else {
+            // user found, check for password
+            let storedPassword = result[0].password;
+            if(password === storedPassword) {
+                res.send({"success": true});
+            } else {
+                res.send({"success": false});
+            }
+        }
+    });
+});
+
+app.post('/api/user/create', (req, res) => {
+    console.log('/api/user/create');
+    let user = req.body;
+    // console.log(user);
+    createUser(user.username, user.password, user.email);
+    res.send({"success": true});
+});
+
+function createUser(username, password, email) {
+    const collection = db.collection(collectionName);
+    collection.insertOne(
+        {
+            "username": username,
+            "password": password,
+            "email": email,
+            "superAdmin": false,
+            "groupAdmin": false,
+            "profileImage": "images/default/profile.gif",
+            "groups": [
+                {
+                    "name": "newbies",
+                    "channels": [
+                        "general",
+                        "help"
+                    ]
+                },
+                {
+                    "name": "general",
+                    "channels": [
+                        "general",
+                        "chitchat",
+                        "topic of the day"
+                    ]
+                }
+            ]
+        }, (err, result) => {
+            assert.strictEqual(null, err);
+        }
+    );
+}
+
+app.post('/api/super/user/create', (req,res) => {
+    createSuperUser();
 });
 
 // create the super user

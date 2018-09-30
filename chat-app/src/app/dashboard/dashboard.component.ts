@@ -43,11 +43,18 @@ export class DashboardComponent implements OnInit {
   newUserEmail = "";
 
   constructor(private usersService:UsersService, private router:Router, private ref: ChangeDetectorRef, private imgService:ImageService) {
-    this.getUser();
+    
    }
 
   ngOnInit() {
     console.log("Logged in as " + this.username);
+    console.log(this.username);
+    if(this.username === null) {
+      alert('You are not logged in');
+      this.router.navigateByUrl('/');
+    } else {
+      this.getUser();
+    }
   }
 
   uploadSelected(event) {
@@ -72,6 +79,11 @@ export class DashboardComponent implements OnInit {
   upload() {
     console.log('Uploading image!');
     const fd = new FormData();
+    console.log(this.selectedFile);
+    if(this.selectedFile === null) {
+      alert('No image selected');
+      return;
+    }
     fd.append('image', this.selectedFile, this.selectedFile.name);
     this.imgService.upload(fd).subscribe(
       data => {
@@ -339,8 +351,34 @@ export class DashboardComponent implements OnInit {
   }
 
   createUser() {
+    if(this.newUserUsername === "") {
+      alert('Username field cannot be blank');
+      return;
+    }
+    if(this.newUserPassword === "") {
+      alert('Password field cannot be blank');
+      return;
+    }
+    for(let user of this.allUsers) {
+      if(user.username === this.newUserUsername) {
+        alert('This user already exists');
+        return;
+      }
+    }
     console.log('Creating new user!');
-    console.log(this.newUserUsername, this.newUserPassword, this.newUserEmail);
+    // console.log(this.newUserUsername, this.newUserPassword, this.newUserEmail);
+    this.usersService.createUser(this.newUserUsername, this.newUserPassword, this.newUserEmail).subscribe(
+      data => {
+        console.log(data);
+      },
+      err => {
+        console.error;
+      },
+      () => {
+        console.log();
+        this.getDataAllUsers();
+      }
+    );
   }
 
 }

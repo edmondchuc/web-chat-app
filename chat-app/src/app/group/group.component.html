@@ -1,53 +1,65 @@
-<h1 class="title is-1">Group: {{groupName}}</h1>
-<h2 class="subtitle is-5">User: {{username}}</h2>
-<br>
-<button (click)="logOut()">Log out</button>
+<section class="hero has-background-primary">
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="title is-1">Group: {{groupName}}</h1>
+            <h2 class="subtitle is-5">User: {{username}}</h2>
+            <button class="button is-light" (click)="logOut()">Log out</button>
+        </div>
+    </div>
+</section>
 
-<div *ngIf="isGroupAdmin || isSuperAdmin" class="container">
-  <div class="notification">
-    <form (submit)="createChannel($event)">
-      <div class="field has-addons has-addons-centered">
-          <label class="label is-large">New channel name:</label>
-          <div class="control">
-              <input class="input" type="text" placeholder="channel name" [(ngModel)]='createChannelName' id='createChannelName' name='createChannelName'>
-          </div>
-          <div class="control">
-            <button class="button is-primary">Create channel</button>
-          </div>
-      </div>
-    </form>
-  </div>
+<div class="container">
+    <div class="notification">
+        <div *ngIf="isGroupAdmin || isSuperAdmin" class="container">
+                <div class="notification">
+                    <form (submit)="createChannel($event)">
+                    <div class="field has-addons has-addons-centered">
+                        <label class="label is-large">New channel name:</label>
+                        <div class="control">
+                            <input class="input" type="text" placeholder="channel name" [(ngModel)]='createChannelName' id='createChannelName' name='createChannelName'>
+                        </div>
+                        <div class="control">
+                            <button class="button is-primary">Create channel</button>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+                
+            <div class="box">
+                <h2 class="title">Channels:</h2>
+                <ul *ngIf="channels && (!isSuperAdmin && !isGroupAdmin)">
+                    <li *ngFor="let channel of channels">
+                        Channel: {{channel}} <button (click)="viewChannel(channel)">View channel</button>
+                    </li>
+                </ul>
+                <ul *ngIf="allChannels && (isSuperAdmin || isGroupAdmin)">
+                    <li *ngFor="let channel of allChannels">
+                        Channel: {{channel}} <button (click)="viewChannel(channel)">View channel</button> <button (click)="removeChannel(channel)">Remove channel</button>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="box">
+                <h2 class="title">Users in group:</h2>
+                <div *ngIf="isGroupAdmin">
+                <input class="" type="text" placeholder="username" [(ngModel)]='newUsername' id='newUsername' name='newUsername'>
+                <button (click)="addUserToGroup()">Add new user</button>
+                </div>
+                
+                <ul *ngIf="allUsers && (!isSuperAdmin && !isGroupAdmin)">
+                    <li *ngFor="let user of allUsers">
+                        User: {{user}}
+                    </li>
+                </ul>
+                <ul *ngIf="allUsers && (isGroupAdmin)">
+                    <li *ngFor="let user of allUsers">
+                        User: {{user}} <button (click)="removeUser(user)">Remove user</button>
+                    </li>
+                </ul>
+            </div>
+    </div>
+    
+    
 </div>
 
-<br>
-<br>
-<h2 class="title">Channels:</h2>
-<ul *ngIf="channels && (!isSuperAdmin && !isGroupAdmin)">
-    <li *ngFor="let channel of channels">
-        Channel: {{channel}} <button (click)="viewChannel(channel)">View channel</button>
-    </li>
-</ul>
-<ul *ngIf="allChannels && (isSuperAdmin || isGroupAdmin)">
-    <li *ngFor="let channel of allChannels">
-        Channel: {{channel}} <button (click)="viewChannel(channel)">View channel</button> <button (click)="removeChannel(channel)">Remove channel</button>
-    </li>
-</ul>
-
-<br>
-<br>
-<h2 class="title">Users in group:</h2>
-<div *ngIf="isGroupAdmin">
-  <input class="" type="text" placeholder="username" [(ngModel)]='newUsername' id='newUsername' name='newUsername'>
-  <button (click)="addUserToGroup()">Add new user</button>
-</div>
-
-<ul *ngIf="allUsers && (!isSuperAdmin && !isGroupAdmin)">
-    <li *ngFor="let user of allUsers">
-        User: {{user}}
-    </li>
-</ul>
-<ul *ngIf="allUsers && (isGroupAdmin)">
-    <li *ngFor="let user of allUsers">
-        User: {{user}} <button (click)="removeUser(user)">Remove user</button>
-    </li>
-</ul>

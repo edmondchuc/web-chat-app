@@ -35,6 +35,7 @@ export class GroupComponent implements OnInit {
     this.username = localStorage.getItem('username');
     this.getUser();
     this.getGroupUsers();
+    
   }
 
   getUser() {
@@ -68,7 +69,7 @@ export class GroupComponent implements OnInit {
   }
 
   ngOnInit() {
-  
+    
   }
 
   logOut() {
@@ -92,6 +93,14 @@ export class GroupComponent implements OnInit {
       alert('New channel name cannot be empty');
       return;
     }
+
+    for(let channel of this.allChannels) {
+      if(this.createChannelName === channel) {
+        alert('This channel already exists');
+        return;
+      }
+    }
+
     console.log(`Creating new channel ${this.createChannelName}`);
     this.usersService.createChannel(this.username, this.groupName, this.createChannelName).subscribe(
       data => {
